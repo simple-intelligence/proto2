@@ -1,0 +1,9 @@
+Jan 31 Milestone:
+	-Quadcopter built
+		-Microcontroller
+		-Sensors
+	-ROS system built
+		-On base
+		-On copter
+	-Networking between base and copter
+
