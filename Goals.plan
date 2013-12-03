@@ -7,3 +7,31 @@ Jan 31 Milestone:
 		-On copter
 	-Networking between base and copter
 
+UPDATE - 
+
+Jan 31 - 
+	Overview
+		- For this deadline, we will be building the copter itself, the ROS Management system and the sensor
+		management system. The primary objective for this build will be for the copter to lift off, fly the 
+		recorded, demonstrated path, and then land again, change the battery, and repeat. 
+		After both batteries have been depleted, the copter will wait in it's base until one is at least 80
+		percent filled and then repeat the proccess. The goal is to switch the battery 5 times. 
+		This trial will be outside. 
+		For this build, we won't be using any GPS, but instead give it a guided path and then use the camera 
+		to adjust when it comes time to land. 
+		
+Long term goals - 
+	- Be able to have multiple ways of giving it instructions 
+		- By demonstration
+		- By GPS
+	- Multibase system
+		- Because we want this thing to be able to travel greater distances, being able to dock on multiple
+		bases would be nice. But then we would have to release from one base (The ROS communication) fly
+		autonomously by GPS until it can reattach to the second base.
+		
+	We could have copters flying all around town :)
+	
+	Thats all I have for now.
+		
+		
+		
