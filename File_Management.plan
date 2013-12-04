@@ -1,0 +1,9 @@
+Making a git directory play with a ros directory
+  - Make your personal ros workspace first
+  - [If making repo from scratch]
+    - Use roscreate_pkg to create a package space FIRST
+    - Then initialize git in package space ONLY
+  - [If using already existing git repo]
+    - Clone git repo into ros workspace directly
+  - **This will keep the git repo clean, keep the ros workspace clean,
+    and make it easier to build the package and use other packages**
