@@ -31,7 +31,44 @@ Long term goals -
 		
 	We could have copters flying all around town :)
 	
-	Thats all I have for now.
+	**Thoughts
+	- Creating a development platform - We want as many people as possible to be using this platform
+		- Using a smart phone to control it
+		- Using a computer to control it
+		- Flying Autonomously 
 		
-		
-		
+	In any situation, image processing is required for landing. 
+	
+	- Flying the drone without the base?
+	- Flying the drone directly from the controller
+		- While the copter is being directly controlled, if it flys within x feet of the base, 
+		you can call the "land" or the "swap" function, and it will land itself. 
+		- If we want to land, maybe switch if the battery being charged has a greater %
+	**
+	
+	For the January 31st deadline - specifics - 
+		- Control With Keyboard, have a "land" function
+		- ROS OS -
+			- Sensor Sanitizer
+			- Communication Between Base and Copter 
+			- Communication Between Copter and Controller
+			**I don't know if we need any direct communication between the base and the controller,
+			We can setup a high level command that checks if the base is availible, and if it is,
+			then land. All Charging, base openening/closing, battery exchange is done automatically.
+			- Camera Management 
+			- Controller Management
+			
+		- Microcontroller - 
+			- Sensor Management - 
+				- Accelerometer
+				- Gyroscope
+				- Distance Sensor
+			- Movement/Stablisation Management
+			- Motor Management
+			
+		- How much hardware do we need on the base?
+			- Just enough to land
+				- Low power computer or ???
+			- Design an attachment when user doesn't have his own (Copter in field)
+		- Make Copter independent of a *specific base* 
+		- 
