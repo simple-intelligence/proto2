@@ -71,4 +71,17 @@ Long term goals -
 				- Low power computer or ???
 			- Design an attachment when user doesn't have his own (Copter in field)
 		- Make Copter independent of a *specific base* 
-		- 
+			- The Copter itself will put out its own signal. When it approaches a base, it will
+			send out a request to connect. If the connection is successful, the land function will
+			become available.
+			- There is going to be 3 systems: Base, Copter, Controller. Where do we want to host
+			ROS MASTER?
+			- How much power would it take to host ROS MASTER on the copter itself?
+			
+		Diving Tasks - 
+			- Just take out one after the other
+			
+		Task order - **Please help me fill this out** 
+			- Create a Node for each function
+			- 
+			
