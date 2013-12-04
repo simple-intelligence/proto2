@@ -1,0 +1,6 @@
+/home/dustin/programming/proto2/build/CMakeFiles/clean_test_results.dir
+/home/dustin/programming/proto2/build/CMakeFiles/doxygen.dir
+/home/dustin/programming/proto2/build/gtest/CMakeFiles/gtest.dir
+/home/dustin/programming/proto2/build/gtest/CMakeFiles/gtest_main.dir
+/home/dustin/programming/proto2/build/CMakeFiles/run_tests.dir
+/home/dustin/programming/proto2/build/CMakeFiles/tests.dir
