@@ -30,8 +30,10 @@ Long term goals -
 		autonomously by GPS until it can reattach to the second base.
 		
 	We could have copters flying all around town :)
+
+============================================================================================================
 	
-	**Thoughts
+**Lorin's Thoughts
 	- Creating a development platform - We want as many people as possible to be using this platform
 		- Using a smart phone to control it
 		- Using a computer to control it
@@ -45,8 +47,22 @@ Long term goals -
 		you can call the "land" or the "swap" function, and it will land itself. 
 		- If we want to land, maybe switch if the battery being charged has a greater %
 	**
+
+**Dustin's Thoughts
+	- We should use fuzzy logic for the stabalization and base finding code
+		- The idea is that if were far away from the base or something pushed us way off position
+			then turn the motors on full
+		- If were not far away from the base or a only a small correction is needed then tell the
+			motors to only turn slowly
+		- The cool bit is that this can just be modeled by a simple function and we can get a
+			smooth speed variation
+			- It also eliminates any overcorrection and makes using a margin of error unnecessary
+	** 
+
+============================================================================================================
 	
-	For the January 31st deadline - specifics - 
+Deadlines
+	- January 31st deadline - specifics - 
 		- Control With Keyboard, have a "land" function
 		- ROS OS -
 			- Sensor Sanitizer
@@ -63,6 +79,8 @@ Long term goals -
 				- Accelerometer
 				- Gyroscope
 				- Distance Sensor
+					- Is this distance from base?
+				- Downward range sensor
 			- Movement/Stablisation Management
 			- Motor Management
 			
@@ -76,12 +94,33 @@ Long term goals -
 			become available.
 			- There is going to be 3 systems: Base, Copter, Controller. Where do we want to host
 			ROS MASTER?
+				- Where does the AR Drone host ROS MASTER?
+				- Can't be on the base since the copter can be too far away
+				- Come to think of it it might need to be run on all 3
 			- How much power would it take to host ROS MASTER on the copter itself?
+				- I'd bet not too much
+				- But ROS only runs on certain distros so we will have to have those installed.
+					That could add in some overhead. We'll probably need to make a small ubuntu
+					distro with just what we need.
 			
-		Diving Tasks - 
+============================================================================================================
+
+		Dividing Tasks - 
 			- Just take out one after the other
 			
 		Task order - **Please help me fill this out** 
-			- Create a Node for each function
-			- 
+			- Broadly organize folder structure and node structure # Dustin
+			- Create a Node for each function # Dustin
+			- Implement movement code
+				- Microcontroller level # Lorin
+				- Higher level # Dustin
+					- Implement the ramping up function that AR Drones have
+				- Keyboard Control
+			- Write nodes that get sensor data (can't really fly without this)
+				- Data needs to be sanitized
+					- Can be as simple as multiplying by a constant or as complex as implementing a kalman
+						filter  
+			- Write stabalization system
+			- Implement base tracking (it's now much easier to modify to include fuzzy logic or improved
+				vision)
 			
