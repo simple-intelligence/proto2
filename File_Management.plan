@@ -7,3 +7,5 @@ Making a git directory play with a ros directory
     - Clone git repo into ros workspace directly
   - **This will keep the git repo clean, keep the ros workspace clean,
     and make it easier to build the package and use other packages**
+
+**The entire repo will go into the your-ros-workspace/src/ folder**
