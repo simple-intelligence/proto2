@@ -1,7 +1,0 @@
-Sensor Data (proposed):
-	- Accel (3 axis):
-		{X, Y, Z} Units: m/s^2
-	- Gyro:
-		{X, Y, Z} Units: radians?
-	-
-		
