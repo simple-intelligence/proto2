@@ -13,6 +13,5 @@ Function Examples:
 
 		- move ({pitch, yaw, roll, z})
 		- Range: -1 - 1
-		- Pros: Easier to pack into a ROS msg or python dict
-
+		- Pros: Easier to pack into a ROS msg or python dict and easier to send from AI node
 
