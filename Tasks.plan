@@ -1,0 +1,9 @@
+Priority:
+	- Get parts ordered
+	- Build copter
+	- Set up beaglebones
+	- Create communication between base and copter and copter and controller
+	- Implement movement code
+
+Secondary:
+	- Set up radio controller and reciever
