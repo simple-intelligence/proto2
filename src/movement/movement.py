@@ -3,7 +3,7 @@
 import rospy
 from std_msgs.msg import String
 
-from rand import randrange, randchoice
+from random import randrange, choice
 
 def main ():
 	# Just gonna publish random values now
@@ -13,8 +13,8 @@ def main ():
 	movement_commands = ["Yaw", "Pitch", "Roll", "Z"]
 
 	while not rospy.is_shutdown():
-		for key in movement_commands.keys():
-			command = randchoice (movement_commands) + ": " + str ((randrange (-1, 1))
+		for direction in movement_commands:
+			command = str (choice (movement_commands) + ": " + str ((randrange (-100, 100) / 100)))
 			rospy.loginfo (command)
 			pub.publish (String (command))
 			rospy.sleep (1.0)
