@@ -9,14 +9,25 @@ class directive ():
 		# Rospy Node Info
 		rospy.init_node ('directive', anonymous=True)
 		pub = rospy.Publisher ('movement', Flight_Controls)
-		rospy.Subscriber ('controller', Flight_Controls, self.callback)
+
+		self.num_messages = 0
+
+	def reciever (self):
+		rospy.Subscriber ('movement', Flight_Controls, self.callback)
+		rospy.spin ()
 
 	def callback(self, Controls):
-		print Controls.Pitch
-		print Controls.Yaw
-		print Controls.Roll
-		print Controls.Z
+		#print "Number of Messages: " + str (self.num_messages)
+		#print "Pitch " + str (Controls.Pitch)
+		#print "Yaw " + str (Controls.Yaw)
+		#print "Roll " + str (Controls.Roll)
+		#print "Z " + str (Controls.Z)
+		#print
+		self.num_messages += 1
+		rospy.loginfo (Controls)
 
 
 if __name__=="__main__":
 	drone_control = directive ()
+	while True:
+		drone_control.reciever()

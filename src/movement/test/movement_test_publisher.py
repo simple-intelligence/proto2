@@ -2,21 +2,23 @@
 
 import rospy
 from std_msgs.msg import String
+from proto2.msg import Flight_Controls
 
 from random import randrange, choice
 
 def main ():
 	# Just gonna publish random values now
-	pub = rospy.Publisher ('move_commands', String)
-	rospy.init_node ('movement')
+	pub = rospy.Publisher ('movement', Flight_Controls)
+	rospy.init_node ('controller')
 
-	movement_commands = ["Yaw", "Pitch", "Roll", "Z"]
-
+	controls = Flight_Controls
 	while not rospy.is_shutdown():
-		for direction in movement_commands:
-			command = str (choice (movement_commands) + ": " + str ((randrange (-100, 100) / 100)))
-			rospy.loginfo (command)
-			pub.publish (String (command))
+			Yaw = randrange (-100, 100) / 100.0
+			Pitch = randrange (-100, 100) / 100.0
+			Roll = randrange (-100, 100) / 100.0
+			Z = randrange (-100, 100) / 100.0
+			rospy.loginfo (Flight_Controls (Yaw, Pitch, Roll, Z))
+			pub.publish (Flight_Controls (Yaw, Pitch, Roll, Z))
 			rospy.sleep (1.0)
 
 if __name__=="__main__":
