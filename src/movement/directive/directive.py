@@ -1,14 +1,22 @@
 #!/usr/bin/env python
-
+import roslib
 import rospy
-import std_msgs.msg import String
+from std_msgs.msg import String
+from proto2.msg import Flight_Controls
 
 class directive ():
-	def __init__():
+	def __init__(self):
 		# Rospy Node Info
-		rospy.init_node ('movement/directive', anonymous=True)
-		pub = rospy.Publisher ('movement/', Flight_Controls)
-		rospy.Subscriber ('movement/controller/', Flight_Controls, callback)
+		rospy.init_node ('directive', anonymous=True)
+		pub = rospy.Publisher ('movement', Flight_Controls)
+		rospy.Subscriber ('controller', Flight_Controls, self.callback)
 
-	def callback(self)	
-		
+	def callback(self, Controls):
+		print Controls.Pitch
+		print Controls.Yaw
+		print Controls.Roll
+		print Controls.Z
+
+
+if __name__=="__main__":
+	drone_control = directive ()
