@@ -1,17 +1,18 @@
-High Level Movement Commands -> Stabalization - > Translator -> Microcontroller
+Controller -> Directive -> Stabalization (not needed yet with flight controller were using) -> Translator -> Flight Controller
 
-Function Examples:
-	- High Level Commands:
-		- pitch (magnitude)
-		- yaw (magnitude)
-		- roll (magnitude)
-		- elevation (magnitude)
-		- Range: -1 - 1
-		- Pros: Quite clear whats happening (essentially translates to go left, go right, go up, etc)
+Possible Controllers:
+	- RC Copter Controller/Joystick/
+	- Keyboard
+	- Vision
+	- AI
+	- GPS Module
 
-		or
+Directive:
+	- Will take commands from controller and convert them into a format that can directly be sent to the stabalization layer.
 
-		- move ({pitch, yaw, roll, z})
-		- Range: -1 - 1
-		- Pros: Easier to pack into a ROS msg or python dict and easier to send from AI node
+Stabalization:
+	- For now will just pass values through but, in the future, will take sensor data and modify commands from the directive 
+		layer to allow the copter to better stabalize
 
+Translator:
+	- Will translate directive commands into format required for the microcontroller/flight controller.
