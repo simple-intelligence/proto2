@@ -8,12 +8,12 @@ class directive ():
 	def __init__(self):
 		# Rospy Node Info
 		rospy.init_node ('directive', anonymous=True)
-		pub = rospy.Publisher ('movement', Flight_Controls)
+		pub = rospy.Publisher ('movement/directive', Flight_Controls)
 
 		self.num_messages = 0
 
 	def reciever (self):
-		rospy.Subscriber ('movement', Flight_Controls, self.callback)
+		rospy.Subscriber ('movement/controller', Flight_Controls, self.callback)
 		rospy.spin ()
 
 	def callback(self, Controls):
