@@ -7,12 +7,12 @@ from zmq_communicator import communicator
 
 
 def main ():
-	can = communicator ("Motors", "communication_settings.json")
+	com = communicator ("Motors", "canned_communication_settings.json")
 
 	i = 0
 	while True:
-		msg = can.get_message ("Direction")
-		can.send_message ("Oh no we forgot the motors!!")
+		msg = com.get_message ("Direction")
+		com.send_message ("Oh no we forgot the motors!!")
 		print msg
 		print 
 

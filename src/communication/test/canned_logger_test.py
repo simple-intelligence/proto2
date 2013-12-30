@@ -7,18 +7,16 @@ from zmq_communicator import communicator
 
 
 def main ():
-	can = communicator ("Logger", "communication_settings.json")
+	com = communicator ("Logger", "canned_communication_settings.json")
 	
-	#logger = open (can.log, 'w')
+	logger = open ("proto2.log", 'w')
 
 	while True:
-		for module in can.get_listening_to ():
-			msg = can.get_message (module)
-			print msg
+		for module in com.get_listening_to ():
+			msg = com.get_message (module)
+			logger.write (str (msg) + '\n')
 
-		#logger.write (str (msg) + '\n')
-
-	#logger.close ()
+	logger.close ()
 
 
 main ()
