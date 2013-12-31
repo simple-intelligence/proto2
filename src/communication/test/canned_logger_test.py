@@ -14,6 +14,7 @@ def main ():
 	while True:
 		for module in com.get_listening_to ():
 			msg = com.get_message (module)
+			print msg
 			logger.write (str (msg) + '\n')
 
 	logger.close ()

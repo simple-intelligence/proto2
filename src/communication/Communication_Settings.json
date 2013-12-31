@@ -1,0 +1,39 @@
+## Do not use this yet. Json does not support comments ##
+
+# Modules needed:
+	# Direction (high level motor control)
+	# Translator (low level motor control)
+	# Stabalization (eventually)
+	# Controller (only 1 module needed even though we will have keyboard, android app, etc.
+	# Vision/AI
+	# 
+
+
+{
+	"Direction": {
+		"Port":5001,
+		"Logger_File":"Direction.log", # Not implemented. Not sure if necessary
+		"Listening":[]
+		},
+	"Logger": {
+		"Port":5002,
+		"Logger_File":"Logger.log",
+		"Listening":[
+			"Direction",
+			"Motors",
+			"Controller"
+			]
+		},
+	"Motors": {
+		"Port":5003,
+		"Logger_File":"Motors.log",
+		"Listening":[
+			"Direction"
+			]
+		},
+	"Controller": {
+		"Port":5004,
+		"Logger_File":"Controller.log",
+		"Listening":[]
+		}
+}

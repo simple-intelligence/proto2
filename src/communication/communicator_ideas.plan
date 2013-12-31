@@ -1,6 +1,0 @@
-Advantages of using a communicator class:
-	- Very easy. Just set com = communicator () and then use com.get_message (). Gathers all communication settings in a single file.
-
-Disadvantages of using a communicator class:
-	- Won't be usable in C++ (unless we write another communicator class for C++). Will have to use zmq settings directly
-
