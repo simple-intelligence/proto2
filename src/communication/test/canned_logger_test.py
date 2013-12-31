@@ -16,6 +16,7 @@ def main ():
 			msg = com.get_message (module)
 			print msg
 			logger.write (str (msg) + '\n')
+		sleep (1)
 
 	logger.close ()
 

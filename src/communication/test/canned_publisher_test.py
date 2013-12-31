@@ -17,7 +17,7 @@ def main ():
 		msg = "Hi " + str (i)
 		com.send_message (msg)
 		print msg
-		sleep (2)
+		sleep (.2)
 		i += 1
 
 

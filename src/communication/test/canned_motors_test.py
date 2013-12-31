@@ -14,6 +14,7 @@ def main ():
 		msg = com.get_message ("Direction")
 		com.send_message ("Oh no we forgot the motors!!")
 		print msg
+		sleep (0.5)
 
 
 main ()
