@@ -21,7 +21,7 @@ class communicator ():
 		can be implemented fairly easily.
 		It uses a global update frequency to set the refresh rate
 		"""
-		def __init__(self, communicator, update_frequency=0.1):
+		def __init__(self, communicator, update_frequency=0.01):
 			threading.Thread.__init__(self)
 			self.com = communicator
 			self.update_freq = update_frequency
@@ -105,7 +105,7 @@ class communicator ():
 			sys.stderr.write ("[{mname}] does not subscribe to [{subscriber}]\n".format (mname = self.publisher["mname"], subscriber = module))
 		"""
 		try:
-			self.subscriber[module]["msg"] = self.subscriber[module]["socket"].recv_json ()
+			self.subscriber[module]["msg"] = self.subscriber[module]["socket"].recv_json (zmq.DONTWAIT)
 		except:
 			pass
 
