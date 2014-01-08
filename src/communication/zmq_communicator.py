@@ -32,7 +32,7 @@ class communicator ():
 					self.com.update_queue (module)
 				sleep (self.update_freq)
 	
-	def __init__(self, module_name, settings_file=None):
+	def __init__(self, module_name, settings_file=None, debug=False):
 		# Gettings settings from settings file
 		if not settings_file:
 			self.settings = json.load (open ("Communication_Settings.json", "r"))
@@ -47,11 +47,10 @@ class communicator ():
 		# Setting up publisher
 		self.publisher = {}
 		self.publisher["mname"] = module_name
-		self.publisher["port"] = self.settings[module_name]["Port"]
 
 		self.publisher["context"] = zmq.Context ()	
 		self.publisher["socket"] = self.publisher["context"].socket (zmq.PUB)
-		self.publisher["socket"].bind ("tcp://127.0.0.1:" + str (self.publisher["port"]))
+		self.publisher["socket"].bind ("tcp://" + self.settings[module_name]["IP"] + ":" + self.settings[module_name]["Port"])
 
 		# Setting up subscribers
 		self.listening_to = []
@@ -65,7 +64,7 @@ class communicator ():
 
 			self.subscriber[module]["socket"] = self.subscriber[module]["context"].socket (zmq.SUB)
 			self.subscriber[module]["socket"].setsockopt (zmq.SUBSCRIBE, "")
-			self.subscriber[module]["socket"].connect ("tcp://127.0.0.1:" + str (self.settings[module]["Port"]))
+			self.subscriber[module]["socket"].connect ("tcp://" + self.settings[module]["IP"] + self.settings[module]["Port"])
 			self.subscriber[module]["queue"] = Queue.Queue () # Currently not used.
 			self.subscriber[module]["msg"] = {}
 				
