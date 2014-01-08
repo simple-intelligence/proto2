@@ -13,18 +13,11 @@
 	"Direction": {
 		"IP": "127.0.0.1",
 		"Port": "5001",
-		"Listening":[]
-		},
-	"Logger": {
-		"IP": "127.0.0.1",
-		"Port": "5002",
 		"Listening":[
-			"Direction",
-			"Motors",
 			"Controller"
 			]
 		},
-	"Motors": {
+	"Translator": {
 		"IP": "127.0.0.1",
 		"Port": "5003",
 		"Listening":[
@@ -35,5 +28,14 @@
 		"IP": "127.0.0.1",
 		"Port": "5004",
 		"Listening":[]
+		},
+	"Logger": {
+		"IP": "127.0.0.1",
+		"Port": "5002",
+		"Listening":[
+			"Direction",
+			"Motors",
+			"Controller"
+			]
 		}
 }

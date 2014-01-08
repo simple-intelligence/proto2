@@ -7,7 +7,7 @@ from zmq_communicator import communicator
 
 
 def main ():
-	com = communicator ("Motors", "canned_communication_settings.json")
+	com = communicator ("Motors", settings_file="canned_communication_settings.json", debug=True)
 
 	i = 0
 	while True:

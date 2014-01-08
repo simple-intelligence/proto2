@@ -8,7 +8,7 @@ from zmq_communicator import communicator
 
 
 def main ():
-	com = communicator ("Direction", "canned_communication_settings.json")
+	com = communicator ("Direction", settings_file="canned_communication_settings.json", debug=True)
 
 	print com.get_listening_to ()
 

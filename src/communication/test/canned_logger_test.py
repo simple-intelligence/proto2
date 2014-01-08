@@ -7,7 +7,7 @@ from zmq_communicator import communicator
 
 
 def main ():
-	com = communicator ("Logger", "canned_communication_settings.json")
+	com = communicator ("Logger", settings_file="canned_communication_settings.json", debug=True)
 	
 	#logger = open ("proto2.log", 'w')
 

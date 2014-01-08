@@ -64,7 +64,7 @@ class communicator ():
 
 			self.subscriber[module]["socket"] = self.subscriber[module]["context"].socket (zmq.SUB)
 			self.subscriber[module]["socket"].setsockopt (zmq.SUBSCRIBE, "")
-			self.subscriber[module]["socket"].connect ("tcp://" + self.settings[module]["IP"] + self.settings[module]["Port"])
+			self.subscriber[module]["socket"].connect ("tcp://" + self.settings[module]["IP"] + ":" + self.settings[module]["Port"])
 			self.subscriber[module]["queue"] = Queue.Queue () # Currently not used.
 			self.subscriber[module]["msg"] = {}
 				
@@ -83,6 +83,9 @@ class communicator ():
 		msg ["module"] = self.publisher["mname"]
 
 		self.publisher["socket"].send_json (msg)
+
+	def send_message_raw (self, msg):
+		self.publisher["socket"].send (msg)
 
 	def get_message (self, module):
 		"""
