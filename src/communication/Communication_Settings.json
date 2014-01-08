@@ -1,0 +1,44 @@
+{
+	"Direction": {
+		"IP": "127.0.0.1",
+		"Port": "5001",
+		"Listening":[
+			"Controller"
+			]
+		},
+	"Translator": {
+		"IP": "127.0.0.1",
+		"Port": "5003",
+		"Listening":[
+			"Direction"
+			]
+		},
+	"Controller": {
+		"IP": "127.0.0.1",
+		"Port": "5004",
+		"Listening":[]
+		},
+	"Pinger_Base": {
+		"IP": "127.0.0.1",
+		"Port": "6001",
+		"Listening":[
+			"Pinger_Copter"
+			]
+		},
+	"Pinger_Copter": {
+		"IP": "127.0.0.1",
+		"Port": "6000",
+		"Listening":[
+			"Pinger_Base"
+			]
+		},
+	"Logger": {
+		"IP": "127.0.0.1",
+		"Port": "5002",
+		"Listening":[
+			"Direction",
+			"Motors",
+			"Controller"
+			]
+		}
+}

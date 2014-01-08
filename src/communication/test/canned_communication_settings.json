@@ -1,0 +1,25 @@
+{
+	"Direction": {
+		"IP": "127.0.0.1",
+		"Port": "5001",
+		"Logger_File":"Direction.log",
+		"Listening":[]
+		},
+	"Logger": {
+		"IP": "127.0.0.1",
+		"Port": "5002",
+		"Logger_File":"Logger.log",
+		"Listening":[
+			"Direction",
+			"Motors"
+			]
+		},
+	"Motors": {
+		"IP": "127.0.0.1",
+		"Port": "5003",
+		"Logger_File":"Subscriber.log",
+		"Listening":[
+			"Direction"
+			]
+		}
+}
