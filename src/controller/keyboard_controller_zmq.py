@@ -58,7 +58,7 @@ class keyboard_controller ():
 		self.send_controls (controls)
 	
 	def send_controls (self, controls):
-		com.send_message (controls)
+		self.com.send_message (controls)
 		
 if __name__=="__main__":
 	controller = keyboard_controller ()

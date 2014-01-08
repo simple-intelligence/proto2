@@ -36,7 +36,11 @@ class communicator ():
 		# Gettings settings from settings file
 		if not settings_file:
 			# TODO: This needs fixing. Don't hardcode things like this.
-			self.settings = json.load (open ("/home/dustin/programming/ros_workspace/src/proto2/src/communication/Communication_Settings.json", "r"))
+			try:
+				self.settings = json.load (open ("/home/dustin/programming/ros_workspace/src/proto2/src/communication/Communication_Settings.json", "r"))
+			except:
+				sys.stderr.write ("Communication_Settings.json is not in json format!\n")
+				sys.exit ()
 		else:
 			try:
 				self.settings = json.load (open (settings_file, "r"))
