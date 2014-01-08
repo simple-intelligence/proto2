@@ -1,6 +1,6 @@
 import sys
 import os
-from time import sleep
+from time import sleep, time
 
 sys.path.append (os.path.abspath ("../"))
 from zmq_communicator import communicator
@@ -16,6 +16,7 @@ def main ():
 	while True:
 		msg = "Hi " + str (i)
 		com.send_message (msg)
+		com.send_message_raw (str (time()))
 		print msg
 		sleep (.2)
 		i += 1

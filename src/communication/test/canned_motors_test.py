@@ -12,8 +12,10 @@ def main ():
 	i = 0
 	while True:
 		msg = com.get_message ("Direction")
+		raw_msg = com.get_message ("Direction", raw=True)
 		com.send_message ("Oh no we forgot the motors!!")
 		print msg
+		print raw_msg
 		sleep (0.5)
 
 

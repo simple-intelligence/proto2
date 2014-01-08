@@ -35,7 +35,8 @@ class communicator ():
 	def __init__(self, module_name, settings_file=None, debug=False):
 		# Gettings settings from settings file
 		if not settings_file:
-			self.settings = json.load (open ("Communication_Settings.json", "r"))
+			# TODO: This needs fixing. Don't hardcode things like this.
+			self.settings = json.load (open ("/home/dustin/programming/ros_workspace/src/proto2/src/communication/Communication_Settings.json", "r"))
 		else:
 			try:
 				self.settings = json.load (open (settings_file, "r"))
@@ -67,9 +68,10 @@ class communicator ():
 			self.subscriber[module]["socket"].connect ("tcp://" + self.settings[module]["IP"] + ":" + self.settings[module]["Port"])
 			self.subscriber[module]["queue"] = Queue.Queue () # Currently not used.
 			self.subscriber[module]["msg"] = {}
+			self.subscriber[module]["raw_msg"] = None
 				
 		# Setting up queue system
-		self.refresher = self.queue_refresher (communicator=self) 
+		self.refresher = self.queue_refresher (communicator=self, update_frequency=self.settings[module_name]["Update_Frequency"]) 
 		self.refresher.daemon = True
 		self.refresher.start()
 
@@ -83,9 +85,6 @@ class communicator ():
 		msg ["module"] = self.publisher["mname"]
 
 		self.publisher["socket"].send_json (msg)
-
-	def send_message_raw (self, msg):
-		self.publisher["socket"].send (msg)
 
 	def get_message (self, module):
 		"""
