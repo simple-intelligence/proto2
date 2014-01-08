@@ -1,0 +1,18 @@
+Controller -> Directive -> Stabalization (not needed yet with flight controller were using) -> Translator -> Flight Controller
+
+Possible Controllers:
+	- RC Copter Controller/Joystick/
+	- Keyboard
+	- Vision
+	- AI
+	- GPS Module
+
+Directive:
+	- Will take commands from controller and convert them into a format that can directly be sent to the stabalization layer.
+
+Stabalization:
+	- For now will just pass values through but, in the future, will take sensor data and modify commands from the directive 
+		layer to allow the copter to better stabalize
+
+Translator:
+	- Will translate directive commands into format required for the microcontroller/flight controller.
