@@ -1,7 +1,12 @@
 {
-	"IP": "127.0.0.1",
-	"Port": "6000",
+	"Base": {
+		"IP": "127.0.0.1",
+		"Port": "6000"
+		},
+	"Copter": {
+		"IP": "127.0.0.1",
+		"Port": "6001"
+		},
 	"Ping Frequency": 1,
-	"Ping Threshold": 5,
-	"
+	"Ping Threshold": 5
 }

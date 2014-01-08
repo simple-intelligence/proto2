@@ -11,13 +11,13 @@
 
 {
 	"Direction": {
-		"Port":5001,
-		"Logger_File":"Direction.log", # Not implemented. Not sure if necessary
+		"IP": "127.0.0.1",
+		"Port": "5001",
 		"Listening":[]
 		},
 	"Logger": {
-		"Port":5002,
-		"Logger_File":"Logger.log",
+		"IP": "127.0.0.1",
+		"Port": "5002",
 		"Listening":[
 			"Direction",
 			"Motors",
@@ -25,15 +25,15 @@
 			]
 		},
 	"Motors": {
-		"Port":5003,
-		"Logger_File":"Motors.log",
+		"IP": "127.0.0.1",
+		"Port": "5003",
 		"Listening":[
 			"Direction"
 			]
 		},
 	"Controller": {
-		"Port":5004,
-		"Logger_File":"Controller.log",
+		"IP": "127.0.0.1",
+		"Port": "5004",
 		"Listening":[]
 		}
 }
