@@ -1,0 +1,41 @@
+## Do not use this yet. Json does not support comments ##
+
+# Modules needed:
+	# Direction (high level motor control)
+	# Translator (low level motor control)
+	# Stabalization (eventually)
+	# Controller (only 1 module needed even though we will have keyboard, android app, etc.
+	# Vision/AI
+	# 
+
+
+{
+	"Direction": {
+		"IP": "127.0.0.1",
+		"Port": "5001",
+		"Listening":[
+			"Controller"
+			]
+		},
+	"Translator": {
+		"IP": "127.0.0.1",
+		"Port": "5003",
+		"Listening":[
+			"Direction"
+			]
+		},
+	"Controller": {
+		"IP": "127.0.0.1",
+		"Port": "5004",
+		"Listening":[]
+		},
+	"Logger": {
+		"IP": "127.0.0.1",
+		"Port": "5002",
+		"Listening":[
+			"Direction",
+			"Motors",
+			"Controller"
+			]
+		}
+}
