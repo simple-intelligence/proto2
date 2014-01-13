@@ -1,11 +1,11 @@
 import sys
 import os
 from time import sleep
-
-from networker import passive_pinger
+		
 sys.path.append (os.path.abspath ("../../../"))
 from communication.zmq_communicator import communicator
-		
+from communication.network_utils import passive_pinger
+
 def send_video ():
 	print "Sending Video!"
 
