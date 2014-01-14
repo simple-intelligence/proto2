@@ -1,0 +1,25 @@
+Use a series of LED circles/squares with a fixed ratio.
+	- Advantages
+		- Height can be estimated from base only
+		- Circle detection algorithms are fairly robust (and easy to implement)
+		- Can be scaled easily
+		- Can be seen in bad light conditions
+	- Disadvantages
+		- Cannot be always seen as base is not flat
+		- Large course corrections will alter angle of copter, turning circles into ellipses
+			- Could be corrected for with direct access to accelerometer data
+		- Color is fluid as the light changes
+
+Use a solid color for the entire base and search for circles/squares
+	- Advatages
+		- Shape detection easy
+		- Color filtering easy
+	- Disadvatages
+		- Color changes with lighting conditions
+		- Can't estimate height unless absolute size of shape is known (and even that gets innacurate and higher or lower altidudes)
+		- Might be hard to see with a non-flat base
+
+
+
+Regarding system that do not use vision: I haven't been able to find anything. Vision is largely the most used as most quadcopters are
+already going to have a camera.
