@@ -85,8 +85,8 @@ class communicator ():
 	def send_message (self, msg):
 		if msg is not dict:
 			msg = {"message": msg}
-		msg ["time"] = time ()
-		msg ["module"] = self.publisher["mname"]
+		msg["time"] = time ()
+		msg["module"] = self.publisher["mname"]
 
 		self.publisher["socket"].send_json (msg)
 
