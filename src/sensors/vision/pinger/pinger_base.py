@@ -6,8 +6,8 @@ sys.path.append (os.path.abspath ("../../../"))
 from communication.zmq_communicator import communicator
 from communication.network_utils import passive_pinger
 		
-def send_video ():
-	print "Sending Video!"
+def recieve_video ():
+	print "Recieving Video!"
 
 def main ():
 	com = communicator ("Pinger_Base", debug=True)
@@ -18,7 +18,7 @@ def main ():
 
 	while True:
 		if pinger.CONNECTED:
-			send_video ()
+			recieve_video ()
 		else:
 			print "Not Connected!"
 		sleep (1)
