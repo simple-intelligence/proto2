@@ -18,6 +18,7 @@ class directive ():
 	
 	def send_controls (self):
 		print self.control_msg
+		print 
 		self.com.send_message (self.control_msg)
 		time.sleep (1)
 

@@ -16,6 +16,7 @@ class keyboard_controller ():
 		self.printcontrols()
 		while not self.exit:
 			key = getch()
+			print key
 			self.parsekey (key)
 
 	def printcontrols (self):
@@ -34,26 +35,28 @@ class keyboard_controller ():
 		controls = {"Pitch":0, "Roll":0, "Yaw":0, "Z":0}
 		if key.lower() == 'w':
 			controls["Pitch"] = 0.5
-		if key.lower() == 's':
+		elif key.lower() == 's':
 			controls["Pitch"] = -0.5
 
-		if key.lower() == 'a':
+		elif key.lower() == 'a':
 			controls["Roll"] = 0.5
-		if key.lower() == 'd':
+		elif key.lower() == 'd':
 			controls["Roll"] = -0.5
 
-		if key.lower() == 'q':
+		elif key.lower() == 'q':
 			controls["Yaw"] = 0.5
-		if key.lower() == 'e':
+		elif key.lower() == 'e':
 			controls["Yaw"] = -0.5
 	
-		if key.lower() == 'r':
+		elif key.lower() == 'r':
 			controls["Z"] = 0.5
-		if key.lower() == 'f':
+		elif key.lower() == 'f':
 			controls["Z"] = -0.5
 
-		if key.lower() == 'p':
+		elif key.lower() == 'p':
 			self.exit = 1
+		else:
+			controls = {"Pitch":0, "Roll":0, "Yaw":0, "Z":0}
 
 		self.send_controls (controls)
 	
