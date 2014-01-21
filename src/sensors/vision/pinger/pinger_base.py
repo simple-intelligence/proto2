@@ -10,7 +10,7 @@ def recieve_video ():
 	print "Recieving Video!"
 
 def main ():
-	com = communicator ("Pinger_Base", debug=True)
+	com = communicator ("Pinger_Base")
 
 	pinger = passive_pinger (communicator=com)
 	pinger.daemon = True

@@ -9,7 +9,10 @@ import zmq
 class communicator ():
 	"""
 	zmq communicator class that takes settings from a json file
-	Publisher has a default high-water-mark of 1000. There is NO maxsize on the queues.
+
+	Publisher has a default high-water-mark of 1000. If needed a queue system can be implemented,
+	however, it is probably not necessary right now. Currently only the latest message is kept.
+
 	Currently, if the subscriber is requesting messages faster than the publisher is publishing,
 	the communicator will pass back a duplicate. This is not an issue but needs to be remembered.
 	"""
@@ -19,7 +22,7 @@ class communicator ():
 		This is a constantly running thread that updates the currently sent msg.
 		Currently it only writes to a single msg value rather than a queue but that
 		can be implemented fairly easily.
-		It uses a global update frequency to set the refresh rate
+		It uses a per-module update frequency to set the refresh rate
 		"""
 		def __init__(self, communicator, update_frequency=0.01):
 			threading.Thread.__init__(self)
@@ -32,7 +35,7 @@ class communicator ():
 					self.com.update_queue (module)
 				sleep (self.update_freq)
 	
-	def __init__(self, module_name, settings_file=None, debug=False):
+	def __init__(self, module_name, settings_file=None):
 		# Gettings settings from settings file
 		if not settings_file:
 			# TODO: This needs fixing. Don't hardcode things like this.
@@ -70,11 +73,11 @@ class communicator ():
 			self.subscriber[module]["socket"] = self.subscriber[module]["context"].socket (zmq.SUB)
 			self.subscriber[module]["socket"].setsockopt (zmq.SUBSCRIBE, "")
 			self.subscriber[module]["socket"].connect ("tcp://" + self.settings[module]["IP"] + ":" + self.settings[module]["Port"])
-			self.subscriber[module]["queue"] = Queue.Queue () # Currently not used.
+			#self.subscriber[module]["queue"] = Queue.Queue () # Currently unnecessary
 			self.subscriber[module]["msg"] = {}
-			self.subscriber[module]["raw_msg"] = None
+			#self.subscriber[module]["raw_msg"] = None # Unused
 				
-		# Setting up queue system
+		# Setting up refresher system
 		self.refresher = self.queue_refresher (communicator=self, update_frequency=self.settings[module_name]["Update_Frequency"]) 
 		self.refresher.daemon = True
 		self.refresher.start()
@@ -113,14 +116,3 @@ class communicator ():
 			self.subscriber[module]["msg"] = self.subscriber[module]["socket"].recv_json (zmq.DONTWAIT)
 		except:
 			pass
-
-
-
-
-
-
-
-
-
-
-

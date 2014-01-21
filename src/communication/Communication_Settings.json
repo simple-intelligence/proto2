@@ -18,7 +18,7 @@
 	"Controller": {
 		"IP": "127.0.0.1",
 		"Port": "5000",
-		"Update_Frequency": 0.01,
+		"Update_Frequency": 0.10,
 		"Listening":[]
 		},
 	"Pinger_Base": {
@@ -45,6 +45,22 @@
 			"Direction",
 			"Motors",
 			"Controller"
+			]
+		}
+	"Video_Reciever": {
+		"IP": "127.0.0.1",
+		"Port": "5020",
+		"Update_Frequency": 0.1,
+		"Listening":[
+			"Video_Sender"
+			]
+		}
+	"Video_Sender": {
+		"IP": "127.0.0.1",
+		"Port": "5020",
+		"Update_Frequency": 0.1,
+		"Listening":[
+			"Video_Reciever"
 			]
 		}
 }

@@ -8,7 +8,7 @@ from copy import deepcopy
 sys.path.append (os.path.abspath("../../../"))
 from communication.zmq_communicator import communicator
 
-class Red_Circle_Finder ():
+class Base_Finder:
 	def __init__(self):
 		self.images = {}
 	
@@ -64,9 +64,9 @@ class Red_Circle_Finder ():
 					pass
 
 def main ():
-	cap = cv2.VideoCapture (1)
+	cap = cv2.VideoCapture (0)
 
-	processor = Red_Circle_Finder ()
+	processor = Base_Finder ()
 	while cap.isOpened():
 		ret, image = cap.read ()
 

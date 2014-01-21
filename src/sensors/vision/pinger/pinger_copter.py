@@ -10,7 +10,7 @@ def send_video ():
 	print "Sending Video!"
 
 def main ():
-	com = communicator ("Pinger_Copter", debug=True)
+	com = communicator ("Pinger_Copter")
 
 	pinger = passive_pinger (communicator=com)
 	pinger.daemon = True
