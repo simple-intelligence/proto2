@@ -1,7 +1,10 @@
 import sys
 import os
 import threading
+import json
 from time import time, sleep
+from numpy import frombuffer
+from debug_utils import print_d
 
 class passive_pinger (threading.Thread):
 	def __init__(self, communicator, _ping_threshold=5, _ping_frequency=1):
@@ -40,20 +43,25 @@ class passive_pinger (threading.Thread):
 
 
 class video_server:
-	def __init__(self, camera, settings_file = None):,
+	"""
+	This will passively start getting images from the camera specified in the settings file or, if no settings file specified,
+	from Video_Settings.json and send those images out using zmq. This will not run automatically when it is called but it will
+	when run is called
+	"""
+	def __init__(self, camera, settings_file = None):
 		# Gettings settings from settings file
 		if not settings_file:
 			# TODO: This needs fixing. Don't hardcode things like this.
 			try:
 				self.settings = json.load (open ("/home/dustin/programming/ros_workspace/src/proto2/src/communication/Video_Settings.json", "r"))
 			except:
-				sys.stderr.write ("Communication_Settings.json is not in json format!\n")
+				print_d ("Video_Settings.json is not in json format!")
 				sys.exit ()
 		else:
 			try:
 				self.settings = json.load (open (settings_file, "r"))
 			except:
-				sys.stderr.write ("Specified file [{sfile}] doesn't exist or is not in json format!\n".format (sfile = settings_file))
+				print_d ("Specified file [{sfile}] doesn't exist or is not in json format!".format (sfile = settings_file))
 				sys.exit ()
 
 		context = zmq.Context ()
@@ -79,12 +87,73 @@ class video_server:
 		pinger.daemon = True
 		pinger.start ()
 
-		self.run ()
-
 	def run (self):
 		while True:
-			ret, frame = self.cap.read ()
+			ret, self.frame = self.cap.read ()
 			if pinger.CONNECTED and ret:
 				self.send_frame ()
-			else:
-				print "Not Connected!"
+
+	def send_frame (self):
+		metadata = {}
+		metadata['dtype'] = str (self.frame.dtype)
+		metadata['shape'] = self.frame.shape
+		try:
+				self.server.send_json (metadata, flags=zmq.SNDMORE and zmq.NOBLOCK)
+				self.server.send (self.frame, copy=True, track=False, flags=zmq.NOBLOCK)
+		except zmq.ZMQError:
+				pass
+
+class video_reciever:
+	"""
+	video_reciever get images sent by the video server using settings in the file specified or in Video_Settings.json
+	if no file specified
+	"""
+	def __init__(self, camera, settings_file = None):
+		# Gettings settings from settings file
+		if not settings_file:
+			# TODO: This needs fixing. Don't hardcode things like this.
+			try:
+				self.settings = json.load (open ("/home/dustin/programming/ros_workspace/src/proto2/src/communication/Video_Settings.json", "r"))
+			except:
+				print_d ("Video_settings.json is not in json format!")
+				sys.exit ()
+		else:
+			try:
+				self.settings = json.load (open (settings_file, "r"))
+			except:
+				print_d ("Specified file [{sfile}] doesn't exist or is not in json format!".format (sfile = settings_file))
+				sys.exit ()
+
+		context = zmq.Context ()
+
+		# ZMQ Settings	
+		self.confirmer = context.socket (zmq.PUB)
+		self.confirmer.bind ("tcp://" + self.settings["Reciever_IP"] + self.settings["Reciever_Port"])
+
+		self.reciever = context.socket (zmq.SUB)
+		self.reciever.setsockopt (zmq.SUBSCRIBE, "")
+		self.reciever.connect ("tcp://" + self.settings["Server_IP"] + self.settings["Server_Port"])
+
+		com = communicator ("Pinger_Base")
+
+		self.pinger = passive_pinger (communicator=com)
+		self.pinger.daemon = True
+		self.pinger.start ()
+
+		self.num_images_recieved = 0
+
+	def get_frame (self):
+		frame = None
+		if self.pinger.CONNECTED:
+			try:
+				metadata = self.reciever.recv_json ()
+				message = self.reciever.recv (copy=True, track=False)
+				buf = buffer (message)		  
+				frame = frombuffer (buf, dtype=metadata['dtype'])
+				frame = frame.reshape (metadata['shape'])		  
+				self.num_images += 1
+				print_d (num_images)
+			except:
+				pass
+		return frame
+				

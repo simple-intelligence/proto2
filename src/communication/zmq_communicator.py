@@ -5,6 +5,7 @@ import threading
 from time import time, sleep
 
 import zmq
+from debug_utils import print_d
 
 class communicator ():
 	"""
@@ -42,13 +43,13 @@ class communicator ():
 			try:
 				self.settings = json.load (open ("/home/dustin/programming/ros_workspace/src/proto2/src/communication/Communication_Settings.json", "r"))
 			except:
-				sys.stderr.write ("Communication_Settings.json is not in json format!\n")
+				print_d ("Communication_Settings.json is not in json format!")
 				sys.exit ()
 		else:
 			try:
 				self.settings = json.load (open (settings_file, "r"))
 			except:
-				sys.stderr.write ("Specified file [{sfile}] doesn't exist or is not in json format!\n".format (sfile = settings_file))
+				print_d ("Specified file [{sfile}] doesn't exist or is not in json format!".format (sfile = settings_file))
 				sys.exit ()
 
 
