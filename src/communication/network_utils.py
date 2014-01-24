@@ -2,9 +2,13 @@ import sys
 import os
 import threading
 import json
+import zmq
+import cv2
+
 from time import time, sleep
 from numpy import frombuffer
 from debug_utils import print_d
+from zmq_communicator import communicator
 
 class passive_pinger (threading.Thread):
 	def __init__(self, communicator, _ping_threshold=5, _ping_frequency=1):
@@ -70,27 +74,27 @@ class video_server:
 		self.cap = cv2.VideoCapture (self.settings[camera]["Index"])
 		self.cap.set (cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, self.settings[camera]["Height"])
 		self.cap.set (cv2.cv.CV_CAP_PROP_FRAME_WIDTH, self.settings[camera]["Width"])
-		self.cap.set (cv2.cv.CV_CAP_PROP_FOURCC, cv2.cv.CV_FOURCC (self.settings[camera]["Codec"]))
+		#self.cap.set (cv2.cv.CV_CAP_PROP_FOURCC, cv2.cv.CV_FOURCC (self.settings[camera]["Codec"]))
 
 		# ZMQ Settings	
 		self.server = context.socket (zmq.PUB)
 		self.server.setsockopt (zmq.HWM, self.settings[camera]["HWM"])
-		self.server.bind ("tcp://" + self.settings["Server_IP"] + self.settings["Server_Port"])
+		self.server.bind ("tcp://" + self.settings["Server_IP"] + ":" + self.settings["Server_Port"])
 
-		self.confirmer = context.socket (zmq.SUB)
-		self.confirmer.setsockopt (zmq.SUBSCRIBE, "")
-		self.confirmer.connect ("tcp://" + self.settings["Reciever_IP"] + self.settings["Reciever_Port"])
+		#self.confirmer = context.socket (zmq.SUB)
+		#self.confirmer.setsockopt (zmq.SUBSCRIBE, "")
+		#self.confirmer.connect ("tcp://" + self.settings["Reciever_IP"] + ":" + self.settings["Reciever_Port"])
 
 		com = communicator ("Pinger_Copter")
 
-		pinger = passive_pinger (communicator=com)
-		pinger.daemon = True
-		pinger.start ()
+		self.pinger = passive_pinger (communicator=com)
+		self.pinger.daemon = True
+		self.pinger.start ()
 
 	def run (self):
 		while True:
 			ret, self.frame = self.cap.read ()
-			if pinger.CONNECTED and ret:
+			if self.pinger.CONNECTED and ret:
 				self.send_frame ()
 
 	def send_frame (self):
@@ -127,12 +131,12 @@ class video_reciever:
 		context = zmq.Context ()
 
 		# ZMQ Settings	
-		self.confirmer = context.socket (zmq.PUB)
-		self.confirmer.bind ("tcp://" + self.settings["Reciever_IP"] + self.settings["Reciever_Port"])
+		#self.confirmer = context.socket (zmq.PUB)
+		#self.confirmer.bind ("tcp://" + self.settings["Reciever_IP"] + ":" + self.settings["Reciever_Port"])
 
 		self.reciever = context.socket (zmq.SUB)
 		self.reciever.setsockopt (zmq.SUBSCRIBE, "")
-		self.reciever.connect ("tcp://" + self.settings["Server_IP"] + self.settings["Server_Port"])
+		self.reciever.connect ("tcp://" + self.settings["Server_IP"] + ":" + self.settings["Server_Port"])
 
 		com = communicator ("Pinger_Base")
 

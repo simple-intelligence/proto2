@@ -46,7 +46,7 @@
 			"Motors",
 			"Controller"
 			]
-		}
+		},
 	"Video_Reciever": {
 		"IP": "127.0.0.1",
 		"Port": "5020",
@@ -54,7 +54,7 @@
 		"Listening":[
 			"Video_Sender"
 			]
-		}
+		},
 	"Video_Sender": {
 		"IP": "127.0.0.1",
 		"Port": "5020",

@@ -1,1 +1,13 @@
-{}
+{
+	"Reciever_IP": "127.0.0.1",
+	"Reciever_Port": "7000",
+	"Server_IP": "127.0.0.1",
+	"Server_Port": "7001",
+	"Downward": {
+		"Index": 0,
+		"Height": 480,
+		"Width": 640,
+		"Codec": "H264",
+		"HWM": 20
+		}
+}
