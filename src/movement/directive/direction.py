@@ -17,9 +17,10 @@ class directive ():
 		self.control_msg = self.com.get_message ("Controller")
 	
 	def send_controls (self):
-		print self.control_msg
-		print 
-		self.com.send_message (self.control_msg)
+		if self.control_msg:
+			print self.control_msg["message"]
+			print 
+			self.com.send_message (self.control_msg["message"])
 		time.sleep (1)
 
 if __name__=="__main__":
