@@ -49,8 +49,7 @@ class passive_pinger (threading.Thread):
 class video_server:
 	"""
 	This will passively start getting images from the camera specified in the settings file or, if no settings file specified,
-	from Video_Settings.json and send those images out using zmq. This will not run automatically when it is called but it will
-	when run is called
+	from Video_Settings.json and send those images out using zmq. This will not run automatically when it is called.
 	"""
 	def __init__(self, camera, settings_file = None):
 		# Gettings settings from settings file
@@ -74,7 +73,8 @@ class video_server:
 		self.cap = cv2.VideoCapture (self.settings[camera]["Index"])
 		self.cap.set (cv2.cv.CV_CAP_PROP_FRAME_HEIGHT, self.settings[camera]["Height"])
 		self.cap.set (cv2.cv.CV_CAP_PROP_FRAME_WIDTH, self.settings[camera]["Width"])
-		#self.cap.set (cv2.cv.CV_CAP_PROP_FOURCC, cv2.cv.CV_FOURCC (self.settings[camera]["Codec"]))
+		self.cap.set (cv2.cv.CV_CAP_PROP_FPS, self.settings[camera]["FPS"])
+		self.cap.set (cv2.cv.CV_CAP_PROP_FOURCC, cv2.cv.CV_FOURCC (str (self.settings[camera]["Codec"][0]), str (self.settings[camera]["Codec"][1]), str (self.settings[camera]["Codec"][2]), str (self.settings[camera]["Codec"][3])))
 
 		# ZMQ Settings	
 		self.server = context.socket (zmq.PUB)
@@ -91,21 +91,17 @@ class video_server:
 		self.pinger.daemon = True
 		self.pinger.start ()
 
-	def run (self):
-		while True:
-			ret, self.frame = self.cap.read ()
-			if self.pinger.CONNECTED and ret:
-				self.send_frame ()
-
 	def send_frame (self):
-		metadata = {}
-		metadata['dtype'] = str (self.frame.dtype)
-		metadata['shape'] = self.frame.shape
-		try:
-				self.server.send_json (metadata, flags=zmq.SNDMORE and zmq.NOBLOCK)
-				self.server.send (self.frame, copy=True, track=False, flags=zmq.NOBLOCK)
-		except zmq.ZMQError:
-				pass
+		ret, self.frame = self.cap.read ()
+		if self.pinger.CONNECTED and ret:
+			metadata = {}
+			metadata['dtype'] = str (self.frame.dtype)
+			metadata['shape'] = self.frame.shape
+			try:
+					self.server.send_json (metadata, flags=zmq.SNDMORE and zmq.NOBLOCK)
+					self.server.send (self.frame, copy=True, track=False, flags=zmq.NOBLOCK)
+			except zmq.ZMQError:
+					pass
 
 class video_reciever:
 	"""

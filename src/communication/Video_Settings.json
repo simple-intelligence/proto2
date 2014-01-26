@@ -8,6 +8,7 @@
 		"Height": 480,
 		"Width": 640,
 		"Codec": "H264",
-		"HWM": 20
+		"HWM": 20,
+		"FPS": 15
 		}
 }

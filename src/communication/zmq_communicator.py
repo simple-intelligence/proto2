@@ -87,8 +87,7 @@ class communicator ():
 		return self.listening_to
 
 	def send_message (self, msg):
-		if msg is not dict:
-			msg = {"message": msg}
+		msg = {"message": msg}
 		msg["time"] = time ()
 		msg["module"] = self.publisher["mname"]
 

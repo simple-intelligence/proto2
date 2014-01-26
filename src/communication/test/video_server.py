@@ -7,7 +7,8 @@ from src.communication.network_utils import video_server
 
 def main ():
 	server = video_server ("Downward")
-	server.run ()
+	while True:
+		server.send_frame ()
 
 if __name__=="__main__":
 	main ()
