@@ -5,7 +5,7 @@ import threading
 from time import time, sleep
 
 import zmq
-from debug_utils import print_d
+from debug_utils import debugging
 
 class communicator ():
 	"""
@@ -16,6 +16,8 @@ class communicator ():
 
 	Currently, if the subscriber is requesting messages faster than the publisher is publishing,
 	the communicator will pass back a duplicate. This is not an issue but needs to be remembered.
+
+	Heavily inspired by work done by Logan Evans for the Robosub of the Palouse club.
 	"""
 
 	class queue_refresher (threading.Thread):
@@ -52,6 +54,7 @@ class communicator ():
 				print_d ("Specified file [{sfile}] doesn't exist or is not in json format!".format (sfile = settings_file))
 				sys.exit ()
 
+		self.debug = debugging ()
 
 		# Setting up publisher
 		self.publisher = {}

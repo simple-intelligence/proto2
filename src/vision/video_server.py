@@ -1,7 +1,7 @@
 import sys
 import os
 
-sys.path.append (os.path.abspath ("../../../"))
+sys.path.append (os.path.abspath ("../../"))
 from src.communication.zmq_communicator import communicator
 from src.communication.network_utils import video_server
 

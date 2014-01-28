@@ -7,7 +7,7 @@ import cv2
 
 from time import time, sleep
 from numpy import frombuffer
-from debug_utils import print_d
+from debug_utils import debugging
 from zmq_communicator import communicator
 
 class passive_pinger (threading.Thread):
@@ -58,16 +58,18 @@ class video_server:
 			try:
 				self.settings = json.load (open ("/home/dustin/programming/ros_workspace/src/proto2/src/communication/Video_Settings.json", "r"))
 			except:
-				print_d ("Video_Settings.json is not in json format!")
+				self.debug.print_d ("Video_Settings.json is not in json format!")
 				sys.exit ()
 		else:
 			try:
 				self.settings = json.load (open (settings_file, "r"))
 			except:
-				print_d ("Specified file [{sfile}] doesn't exist or is not in json format!".format (sfile = settings_file))
+				self.debug.print_d ("Specified file [{sfile}] doesn't exist or is not in json format!".format (sfile = settings_file))
 				sys.exit ()
 
 		context = zmq.Context ()
+
+		self.debug = debugging ()
 
 		# Camera Settings
 		self.cap = cv2.VideoCapture (self.settings[camera]["Index"])
@@ -115,16 +117,18 @@ class video_reciever:
 			try:
 				self.settings = json.load (open ("/home/dustin/programming/ros_workspace/src/proto2/src/communication/Video_Settings.json", "r"))
 			except:
-				print_d ("Video_settings.json is not in json format!")
+				self.debug.print_d ("Video_settings.json is not in json format!")
 				sys.exit ()
 		else:
 			try:
 				self.settings = json.load (open (settings_file, "r"))
 			except:
-				print_d ("Specified file [{sfile}] doesn't exist or is not in json format!".format (sfile = settings_file))
+				self.debug.print_d ("Specified file [{sfile}] doesn't exist or is not in json format!".format (sfile = settings_file))
 				sys.exit ()
 
 		context = zmq.Context ()
+
+		self.debug = debugging ()
 
 		# ZMQ Settings	
 		#self.confirmer = context.socket (zmq.PUB)
@@ -152,7 +156,7 @@ class video_reciever:
 				frame = frombuffer (buf, dtype=metadata['dtype'])
 				frame = frame.reshape (metadata['shape'])		  
 				self.num_images += 1
-				print_d (num_images)
+				self.debug.print_d (num_images)
 			except:
 				pass
 		return frame
