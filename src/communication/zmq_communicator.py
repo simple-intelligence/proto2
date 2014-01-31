@@ -1,4 +1,5 @@
 import sys
+import os
 import Queue
 import json
 import threading
@@ -6,6 +7,10 @@ from time import time, sleep
 
 import zmq
 from debug_utils import debugging
+
+# Finds the root of the proto2 directory
+cwd = os.getcwd ().split ("/")
+proto2_base_path = "/".join (cwd[0:cwd.index ("proto2") + 1])
 
 class communicator ():
 	"""
@@ -39,11 +44,11 @@ class communicator ():
 				sleep (self.update_freq)
 	
 	def __init__(self, module_name, settings_file=None):
+	
 		# Gettings settings from settings file
 		if not settings_file:
-			# TODO: This needs fixing. Don't hardcode things like this.
 			try:
-				self.settings = json.load (open ("/home/dustin/programming/ros_workspace/src/proto2/src/communication/Communication_Settings.json", "r"))
+				self.settings = json.load (open (proto2_base_path + "/src/communication/Communication_Settings.json", "r"))
 			except:
 				print_d ("Communication_Settings.json is not in json format!")
 				sys.exit ()

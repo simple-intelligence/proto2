@@ -1,10 +1,15 @@
 import sys
+import os
 import json
+
+# Finds the root of the proto2 directory
+cwd = os.getcwd ().split ("/")
+proto2_base_path = "/".join (cwd[0:cwd.index ("proto2") + 1])
 
 class debugging:
 	def __init__(self):
 		try:
-			self.settings = json.load (open ("/home/dustin/programming/ros_workspace/src/proto2/Global_Settings.json", "r"))
+			self.settings = json.load (open (proto2_base_path + "/Global_Settings.json", "r"))
 		except:
 			sys.stderr.write ("Global_Settings.json does not exist or is not in json format!\n")
 			sys.exit ()

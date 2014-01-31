@@ -10,6 +10,10 @@ from numpy import frombuffer
 from debug_utils import debugging
 from zmq_communicator import communicator
 
+# Finds the root of the proto2 directory
+cwd = os.getcwd ().split ("/")
+proto2_base_path = "/".join (cwd[0:cwd.index ("proto2") + 1])
+
 class passive_pinger (threading.Thread):
 	def __init__(self, communicator, _ping_threshold=5, _ping_frequency=1):
 		threading.Thread.__init__(self)
@@ -60,7 +64,7 @@ class video_server:
 		if not settings_file:
 			# TODO: This needs fixing. Don't hardcode things like this.
 			try:
-				self.settings = json.load (open ("/home/dustin/programming/ros_workspace/src/proto2/src/communication/Video_Settings.json", "r"))
+				self.settings = json.load (open (proto2_base_path + "/src/communication/Video_Settings.json", "r"))
 			except:
 				self.debug.print_d ("Video_Settings.json is not in json format!")
 				sys.exit ()
@@ -132,7 +136,7 @@ class video_reciever:
 		if not settings_file:
 			# TODO: This needs fixing. Don't hardcode things like this.
 			try:
-				self.settings = json.load (open ("/home/dustin/programming/ros_workspace/src/proto2/src/communication/Video_Settings.json", "r"))
+				self.settings = json.load (open (proto2_base_path + "/src/communication/Video_Settings.json", "r"))
 			except:
 				self.debug.print_d ("Video_settings.json is not in json format!")
 				sys.exit ()
