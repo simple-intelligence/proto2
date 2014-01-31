@@ -85,12 +85,12 @@ class video_server:
 		# ZMQ Settings	
 		self.server = context.socket (zmq.PUB)
 		self.server.setsockopt (zmq.HWM, self.settings[camera]["HWM"])
-		self.server.setsockopt (zmq.SNDTIMEO, 5000)
+		#self.server.setsockopt (zmq.SNDTIMEO, 5000)
 		self.server.bind ("tcp://" + self.settings["Server_IP"] + ":" + self.settings["Server_Port"])
 
 		self.confirmer = context.socket (zmq.SUB)
 		self.confirmer.setsockopt (zmq.SUBSCRIBE, "")
-		self.confirmer.setsockopt (zmq.RCVTIMEO, 5000)
+		#self.confirmer.setsockopt (zmq.RCVTIMEO, 5000)
 		self.confirmer.connect ("tcp://" + self.settings["Reciever_IP"] + ":" + self.settings["Reciever_Port"])
 
 		com = communicator ("Pinger_Copter")
@@ -148,12 +148,12 @@ class video_reciever:
 
 		# ZMQ Settings	
 		self.confirmer = context.socket (zmq.PUB)
-		self.confirmer.setsockopt (zmq.SNDTIMEO, 5000)
+		#self.confirmer.setsockopt (zmq.SNDTIMEO, 5000)
 		self.confirmer.bind ("tcp://" + self.settings["Reciever_IP"] + ":" + self.settings["Reciever_Port"])
 
 		self.reciever = context.socket (zmq.SUB)
 		self.reciever.setsockopt (zmq.SUBSCRIBE, "")
-		self.reciever.setsockopt (zmq.RCVTIMEO, 5000)
+		#self.reciever.setsockopt (zmq.RCVTIMEO, 5000)
 		self.reciever.connect ("tcp://" + self.settings["Server_IP"] + ":" + self.settings["Server_Port"])
 
 		com = communicator ("Pinger_Base")
