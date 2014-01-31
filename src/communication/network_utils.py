@@ -18,6 +18,8 @@ class passive_pinger (threading.Thread):
 		self.ping_frequency = _ping_frequency
 		self.ping_threshold = _ping_threshold
 
+		self.debug = debugging ()
+
 		self.current_timestamp = None
 
 		self.listening_to = communicator.get_listening_to ()
@@ -37,10 +39,12 @@ class passive_pinger (threading.Thread):
 			try:
 				if time () - self.current_timestamp <= self.ping_threshold:
 					self.CONNECTED = True
+					#self.debug.print_d ("CONNECTED!")
 				else:
 					self.CONNECTED = False
 			except:
 				self.CONNECTED = False
+				#self.debug.print_d ("Not CONNECTED!")
 				pass
 
 			sleep (self.ping_frequency) # IMPORTANT! time () does not like you flooding it with requests
@@ -81,11 +85,13 @@ class video_server:
 		# ZMQ Settings	
 		self.server = context.socket (zmq.PUB)
 		self.server.setsockopt (zmq.HWM, self.settings[camera]["HWM"])
+		self.server.setsockopt (zmq.SNDTIMEO, 5000)
 		self.server.bind ("tcp://" + self.settings["Server_IP"] + ":" + self.settings["Server_Port"])
 
-		#self.confirmer = context.socket (zmq.SUB)
-		#self.confirmer.setsockopt (zmq.SUBSCRIBE, "")
-		#self.confirmer.connect ("tcp://" + self.settings["Reciever_IP"] + ":" + self.settings["Reciever_Port"])
+		self.confirmer = context.socket (zmq.SUB)
+		self.confirmer.setsockopt (zmq.SUBSCRIBE, "")
+		self.confirmer.setsockopt (zmq.RCVTIMEO, 5000)
+		self.confirmer.connect ("tcp://" + self.settings["Reciever_IP"] + ":" + self.settings["Reciever_Port"])
 
 		com = communicator ("Pinger_Copter")
 
@@ -93,12 +99,22 @@ class video_server:
 		self.pinger.daemon = True
 		self.pinger.start ()
 
+
 	def send_frame (self):
 		ret, self.frame = self.cap.read ()
-		if self.pinger.CONNECTED and ret:
+
+		# Basic confirmation test
+		self.msg = None
+		try:
+			self.msg = self.confirmer.recv (zmq.DONTWAIT)
+		except:
+			pass
+
+		if self.pinger.CONNECTED and ret and self.msg == "Ready!":
 			metadata = {}
 			metadata['dtype'] = str (self.frame.dtype)
 			metadata['shape'] = self.frame.shape
+			self.debug.print_d ("Send image!")
 			try:
 					self.server.send_json (metadata, flags=zmq.SNDMORE and zmq.NOBLOCK)
 					self.server.send (self.frame, copy=True, track=False, flags=zmq.NOBLOCK)
@@ -131,11 +147,13 @@ class video_reciever:
 		self.debug = debugging ()
 
 		# ZMQ Settings	
-		#self.confirmer = context.socket (zmq.PUB)
-		#self.confirmer.bind ("tcp://" + self.settings["Reciever_IP"] + ":" + self.settings["Reciever_Port"])
+		self.confirmer = context.socket (zmq.PUB)
+		self.confirmer.setsockopt (zmq.SNDTIMEO, 5000)
+		self.confirmer.bind ("tcp://" + self.settings["Reciever_IP"] + ":" + self.settings["Reciever_Port"])
 
 		self.reciever = context.socket (zmq.SUB)
 		self.reciever.setsockopt (zmq.SUBSCRIBE, "")
+		self.reciever.setsockopt (zmq.RCVTIMEO, 5000)
 		self.reciever.connect ("tcp://" + self.settings["Server_IP"] + ":" + self.settings["Server_Port"])
 
 		com = communicator ("Pinger_Base")
@@ -146,17 +164,33 @@ class video_reciever:
 
 		self.num_images_recieved = 0
 
+	def ready_up (self):
+		for i in range (5):
+			self.confirmer.send ("Ready!")
+
 	def get_frame (self):
 		frame = None
 		if self.pinger.CONNECTED:
 			try:
+				self.confirmer.send ("Ready!")
+				self.debug.print_d ("Ready!")
+
 				metadata = self.reciever.recv_json ()
 				message = self.reciever.recv (copy=True, track=False)
+
+				# This is a basic confirmation system test
+				self.confirmer.send ("Not ready!")
+				self.debug.print_d ("Not ready!")
+
 				buf = buffer (message)		  
 				frame = frombuffer (buf, dtype=metadata['dtype'])
 				frame = frame.reshape (metadata['shape'])		  
 				self.num_images += 1
 				self.debug.print_d (num_images)
+
+				self.confirmer.send ("Ready!")
+				self.debug.print_d ("Ready!")
+
 			except:
 				pass
 		return frame
