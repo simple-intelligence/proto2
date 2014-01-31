@@ -4,7 +4,7 @@
 	"Server_IP": "127.0.0.1",
 	"Server_Port": "7001",
 	"Downward": {
-		"Index": 0,
+		"Index": 1,
 		"Height": 480,
 		"Width": 640,
 		"Codec": "H264",

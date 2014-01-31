@@ -99,14 +99,15 @@ class video_server:
 		self.pinger.daemon = True
 		self.pinger.start ()
 
+		self.msg = "Ready!"
 
 	def send_frame (self):
 		ret, self.frame = self.cap.read ()
 
 		# Basic confirmation test
-		self.msg = None
 		try:
 			self.msg = self.confirmer.recv (zmq.DONTWAIT)
+			#self.msg = self.confirmer.recv ()
 		except:
 			pass
 
@@ -114,7 +115,7 @@ class video_server:
 			metadata = {}
 			metadata['dtype'] = str (self.frame.dtype)
 			metadata['shape'] = self.frame.shape
-			self.debug.print_d ("Send image!")
+			self.debug.print_d ("Sent image!")
 			try:
 					self.server.send_json (metadata, flags=zmq.SNDMORE and zmq.NOBLOCK)
 					self.server.send (self.frame, copy=True, track=False, flags=zmq.NOBLOCK)
@@ -167,29 +168,28 @@ class video_reciever:
 	def ready_up (self):
 		for i in range (5):
 			self.confirmer.send ("Ready!")
+			sleep (0.2)
 
 	def get_frame (self):
 		frame = None
 		if self.pinger.CONNECTED:
 			try:
 				self.confirmer.send ("Ready!")
-				self.debug.print_d ("Ready!")
 
 				metadata = self.reciever.recv_json ()
 				message = self.reciever.recv (copy=True, track=False)
 
 				# This is a basic confirmation system test
 				self.confirmer.send ("Not ready!")
-				self.debug.print_d ("Not ready!")
 
-				buf = buffer (message)		  
+				# This can be put into another thread to speed things up
+				buf = buffer (message)
 				frame = frombuffer (buf, dtype=metadata['dtype'])
-				frame = frame.reshape (metadata['shape'])		  
+				frame = frame.reshape (metadata['shape'])
 				self.num_images += 1
 				self.debug.print_d (num_images)
 
 				self.confirmer.send ("Ready!")
-				self.debug.print_d ("Ready!")
 
 			except:
 				pass
