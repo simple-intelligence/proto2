@@ -47,20 +47,19 @@
 			"Controller"
 			]
 		},
-	"Video_Reciever": {
+	"AI": {
 		"IP": "127.0.0.1",
-		"Port": "7000",
+		"Port": "8000",
 		"Update_Frequency": 0.1,
 		"Listening":[
-			"Video_Sender"
+			"Base_Finder"
 			]
 		},
-	"Video_Sender": {
+	"Base_Finder": {
 		"IP": "127.0.0.1",
-		"Port": "7001",
+		"Port": "8001",
 		"Update_Frequency": 0.1,
 		"Listening":[
-			"Video_Reciever"
 			]
 		}
 }
