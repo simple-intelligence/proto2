@@ -34,7 +34,7 @@ class Vision_Processor:
 
 		ret, self.images["H_Thresh_Blur"] = cv2.threshold (self.images["H_Blur"], 100, 255, cv2.THRESH_BINARY)
 
-		self.outputs["Circles"] = cv2.HoughCircles (self.images["H_Thresh_Blur"], cv2.cv.CV_HOUGH_GRADIENT, 2, 10, minRadius=10, maxRadius=320)
+		self.outputs["Circles"] = cv2.HoughCircles (self.images["H_Thresh_Blur"], cv2.cv.CV_HOUGH_GRADIENT, 2, 5, minRadius=5, maxRadius=320)
 
 		self.X_Offset = 0
 		self.Y_Offset = 0
