@@ -14,7 +14,8 @@ class directive ():
 		self.send_controls ()
 
 	def get_controls (self):
-		self.control_msg = self.com.get_message ("Controller")
+		#self.control_msg = self.com.get_message ("Controller")
+		self.control_msg = self.com.get_message ("AI")
 	
 	def send_controls (self):
 		if self.control_msg:

@@ -5,6 +5,7 @@
 		"Update_Frequency": 0.01,
 		"Listening":[
 			"Controller"
+			"AI"
 			]
 		},
 	"Translator": {
@@ -18,7 +19,7 @@
 	"Controller": {
 		"IP": "10.99.66.167",
 		"Port": "5000",
-		"Update_Frequency": 0.10,
+		"Update_Frequency": 0.1,
 		"Listening":[]
 		},
 	"Pinger_Base": {
@@ -30,7 +31,7 @@
 			]
 		},
 	"Pinger_Copter": {
-		"IP": "10.99.66.104",
+		"IP": "10.99.66.167",
 		"Port": "6000",
 		"Update_Frequency": 0.1,
 		"Listening":[
@@ -50,7 +51,7 @@
 	"AI": {
 		"IP": "10.99.66.167",
 		"Port": "8000",
-		"Update_Frequency": 0.1,
+		"Update_Frequency": 0.01,
 		"Listening":[
 			"Base_Finder"
 			]
@@ -58,7 +59,7 @@
 	"Base_Finder": {
 		"IP": "10.99.66.167",
 		"Port": "8001",
-		"Update_Frequency": 0.1,
+		"Update_Frequency": 0.01,
 		"Listening":[
 			]
 		}

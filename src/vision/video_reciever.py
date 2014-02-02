@@ -18,8 +18,8 @@ class Vision_Processor:
 		self.outputted_images = ["H_Thresh_Blur", "Src"]
 		#self.outputted_images = []
 	
-		self.X_Offset = 0
-		self.Y_Offset = 0
+		self.X_pos = 0
+		self.Y_pos = 0
 		self.Radius = 0
 		self.num_circles = 0
 
@@ -36,26 +36,31 @@ class Vision_Processor:
 
 		self.outputs["Circles"] = cv2.HoughCircles (self.images["H_Thresh_Blur"], cv2.cv.CV_HOUGH_GRADIENT, 2, 5, minRadius=5, maxRadius=320)
 
-		self.X_Offset = 0
-		self.Y_Offset = 0
+		self.X_pos = 0
+		self.Y_pos = 0
 		self.Radius = 0
 		self.num_circles = 0
 
 		if self.outputs["Circles"] is not None:
 			for i in self.outputs["Circles"][0]:
 				cv2.circle (self.images["Src"], (i[0], i[1]), i[2], (0, 0, 255), thickness=2)
+				#print "{a}, {b}".format (a=i[0] - 320, b=i[1] - 240)
 
-				self.X_Offset += i[0]
-				self.Y_Offset += i[1]
-				self.Radius += i[2]
-				self.num_circles += 1
+				if self.num_circles < 4:
+					self.X_pos += i[0]
+					self.Y_pos += i[1]
+					self.Radius += i[2]
+					self.num_circles += 1
+				else:
+					pass
 
-			if len (self.outputs["Circles"][0]) > 0 and len (self.outputs["Circles"][0]) <= 4:
-				return (self.X_Offset / self.num_circles,
-						self.Y_Offset / self.num_circles,
-						self.Radius / self.num_circles)
-			else:
-				return (0, 0, 0)
+			#print "avg: {a}, {b}".format (a=(self.X_pos / self.num_circles) - 320, b=(self.Y_pos / self.num_circles) - 240)
+			#print self.num_circles
+			#print
+
+			return (int (self.X_pos / self.num_circles) - 320,
+					int (self.Y_pos / self.num_circles) - 240,
+					int (self.Radius / self.num_circles))
 
 		return (0, 0, 0)
 
@@ -79,17 +84,18 @@ def main ():
 	processor = Vision_Processor ()
 	reciever = video_reciever ("Downward")
 
-	offset = (0, 0, 0)
+	pos = (0, 0, 0)
 
 	#reciever.ready_up () # This is necessary since zmq will always drop the first (at least) message. This is the initial connect
 	while True:
 		frame = reciever.get_frame ()
 
 		if frame is not None:
-			offset = processor.process_image (frame)
+			pos = processor.process_image (frame)
 			processor.show_images ()
-			if offset:
-				print offset
+			if pos:
+				#print pos
+				com.send_message (pos)
 
 			key = cv2.waitKey (20)
 			if key == 1048603 or key == 27:
