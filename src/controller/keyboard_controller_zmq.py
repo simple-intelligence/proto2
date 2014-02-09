@@ -13,6 +13,16 @@ class keyboard_controller ():
 
 		self.com = communicator ("Controller")
 
+		self.pitch = 0
+		self.roll = 0
+		self.yaw = 0
+		self.z = 0
+
+		self.control_incrementer = 0.1
+
+		self.run ()
+
+	def run (self):
 		self.printcontrols()
 		while not self.exit:
 			key = getch()
@@ -33,30 +43,105 @@ class keyboard_controller ():
 	def parsekey (self, key):
 		# TODO: Implement ramping feature
 		controls = {"Pitch":0, "Roll":0, "Yaw":0, "Z":0}
+
+		controls["Pitch"] = self.pitch
+		controls["Roll"] = self.roll
+		controls["Yaw"] = self.yaw
+		controls["Z"] = self.z
+
 		if key.lower() == 'w':
-			controls["Pitch"] = 0.5
+			if self.pitch < 0:
+				self.pitch = 0.0
+			self.pitch += self.control_incrementer
+
+			controls["Pitch"] = self.pitch
+
 		elif key.lower() == 's':
-			controls["Pitch"] = -0.5
+			if self.pitch > 0:
+				self.pitch = 0.0
+			self.pitch -= self.control_incrementer
+
+			controls["Pitch"] = self.pitch
 
 		elif key.lower() == 'a':
-			controls["Roll"] = 0.5
+			if self.roll > 0:
+				self.roll = 0.0
+			self.roll -= self.control_incrementer
+
+			controls["Roll"] = self.roll
+
 		elif key.lower() == 'd':
-			controls["Roll"] = -0.5
+			if self.roll < 0:
+				self.roll = 0.0
+			self.roll += self.control_incrementer
+
+			controls["Roll"] = self.roll
 
 		elif key.lower() == 'q':
-			controls["Yaw"] = 0.5
+			if self.yaw > 0:
+				self.yaw = 0.0
+			self.yaw -= self.control_incrementer
+
+			controls["Yaw"] = self.yaw
+
 		elif key.lower() == 'e':
-			controls["Yaw"] = -0.5
+			if self.yaw < 0:
+				self.yaw = 0.0
+			self.yaw += self.control_incrementer
+
+			controls["Yaw"] = self.yaw
 	
 		elif key.lower() == 'r':
-			controls["Z"] = 0.5
+			if self.z < 0:
+				self.z = 0.0
+			self.z += self.control_incrementer
+
+			controls["Z"] = self.z
+
 		elif key.lower() == 'f':
-			controls["Z"] = -0.5
+			if self.z > 0:
+				self.z = 0.0
+			self.z -= self.control_incrementer
+
+			controls["Z"] = self.z
 
 		elif key.lower() == 'p':
 			self.exit = 1
+			controls = {"Pitch":0, "Roll":0, "Yaw":0, "Z":0}
+			self.roll = 0
+			self.pitch = 0
+			self.yaw = 0
+			self.z = 0
+
 		else:
 			controls = {"Pitch":0, "Roll":0, "Yaw":0, "Z":0}
+			self.roll = 0
+			self.pitch = 0
+			self.yaw = 0
+			self.z = 0
+
+		self.sanitize_controls (controls)
+
+	def sanitize_controls (self, controls):
+		if controls["Pitch"] > 1.0:
+			controls["Pitch"] = 1.0
+		if controls["Pitch"] < -1.0:
+			controls["Pitch"] = -1.0
+
+		if controls["Yaw"] > 1.0:
+			controls["Yaw"] = 1.0
+		if controls["Yaw"] < -1.0:
+			controls["Yaw"] = -1.0
+
+		if controls["Roll"] > 1.0:
+			controls["Roll"] = 1.0
+		if controls["Roll"] < -1.0:
+			controls["Roll"] = -1.0
+
+		if controls["Z"] > 1.0:
+			controls["Z"] = 1.0
+		if controls["Z"] < -1.0:
+			controls["Z"] = -1.0
 
 		self.send_controls (controls)
 	

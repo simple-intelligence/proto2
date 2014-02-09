@@ -44,22 +44,21 @@ class communicator ():
 				sleep (self.update_freq)
 	
 	def __init__(self, module_name, settings_file=None):
-	
+		self.debug = debugging ()
+
 		# Gettings settings from settings file
 		if not settings_file:
 			try:
 				self.settings = json.load (open (proto2_base_path + "/src/communication/Communication_Settings.json", "r"))
 			except:
-				print_d ("Communication_Settings.json is not in json format!")
+				self.debug.print_d ("Communication_Settings.json is not in json format!")
 				sys.exit ()
 		else:
 			try:
 				self.settings = json.load (open (settings_file, "r"))
 			except:
-				print_d ("Specified file [{sfile}] doesn't exist or is not in json format!".format (sfile = settings_file))
+				self.debug.print_d ("Specified file [{sfile}] doesn't exist or is not in json format!".format (sfile = settings_file))
 				sys.exit ()
-
-		self.debug = debugging ()
 
 		# Setting up publisher
 		self.publisher = {}
@@ -83,7 +82,7 @@ class communicator ():
 			self.subscriber[module]["socket"].setsockopt (zmq.SUBSCRIBE, "")
 			self.subscriber[module]["socket"].connect ("tcp://" + self.settings[module]["IP"] + ":" + self.settings[module]["Port"])
 			#self.subscriber[module]["queue"] = Queue.Queue () # Currently unnecessary
-			self.subscriber[module]["msg"] = {}
+			self.subscriber[module]["msg"] = None
 			#self.subscriber[module]["raw_msg"] = None # Unused
 				
 		# Setting up refresher system

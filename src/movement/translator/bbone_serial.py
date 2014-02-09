@@ -1,22 +1,24 @@
 import os
 import sys
-import time
+from time import sleep
 
-import Adafruit_BBIO.UART as UART
+#import Adafruit_BBIO.UART as UART
 import serial
 
 sys.path.append (os.path.abspath("../../"))
 from communication.zmq_communicator import communicator
 
-def setup ():
-	UART.setup ("UART1")
-	global ser = serial.Serial (port = "/dev/tty01", baudrate=9600)
+ser = serial.Serial (port = "/dev/ttyACM0", baudrate=9600)
+
+def setup_serial ():
+	#UART.setup ("UART1")
 	ser.close ()
 	ser.open ()
 
 def send_flight_controls (pitch, yaw, roll, z):
 	if ser.isOpen ():
-		ser.write ("{p} {y} {r} {z}".format (pitch, yaw, roll z))
+		ser.write ("{p} {y} {r} {z_pos}".format (p=pitch, y=yaw, r=roll, z_pos=z))
+		print "{p} {y} {r} {z_pos}".format (p=pitch, y=yaw, r=roll, z_pos=z)
 	
 
 def main ():
@@ -24,8 +26,10 @@ def main ():
 	last_timestamp = 0
 
 	while True:
+		msg = {"message":0, "time":0}
 		msg = com.get_message ("Direction")
-		if msg["time"] > last_timestamp:
+		print msg
+		if msg and msg["time"] > last_timestamp:
 			last_timestamp = msg["time"]
 	
 			pitch = msg["message"]["Pitch"] * 100
@@ -33,7 +37,9 @@ def main ():
 			roll = msg["message"]["Roll"] * 100
 			z = msg["message"]["Z"] * 100
 
-			send_flight_controls (pitch, yaw, roll z)
+			send_flight_controls (pitch, yaw, roll, z)
+		sleep (.5)
 
 if __name__=="__main__":
+	setup_serial ()
 	main ()
