@@ -16,7 +16,7 @@ def setup_serial ():
 
 def send_flight_controls (pitch, yaw, roll, z):
 	if ser.isOpen ():
-		ser.write ("{p} {y} {r} {z_pos}".format (p=pitch, y=yaw, r=roll, z_pos=z))
+		ser.write ("{p},{y},{r},{z_pos}".format (p=pitch, y=yaw, r=roll, z_pos=z))
 		print "{p} {y} {r} {z_pos}".format (p=pitch, y=yaw, r=roll, z_pos=z)
 	
 
