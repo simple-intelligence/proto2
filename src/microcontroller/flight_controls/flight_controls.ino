@@ -9,27 +9,28 @@ Servo pitch_pin;
 Servo roll_pin;
 Servo throttle_pin;
 Servo yaw_pin;
+Servo stabalizer;
 
 int pitch_input = 0;
 int roll_input = 0;
 int throttle_input = 0;
 int yaw_input = 0;
+int arm_input = 0;
 
 int pitch_output = 0;
 int roll_output = 0;
 int throttle_output = 0;
 int yaw_output = 0;
 
+int COPTER_ARMED = 0;
+
 void setup(){
 	pitch_pin.attach(A5);   	
 	roll_pin.attach(A4);
 	throttle_pin.attach(A3);
 	yaw_pin.attach(A2);
-
-	resetOutputs ();
-
-	arm();
-
+        stabalizer.attach (A0);	
+      
 	resetOutputs ();
 
 	Serial.begin(9600);
@@ -40,9 +41,56 @@ void loop()
 {
 	parseSerial ();
 
+	mapInputs ();
+
 	sendCommand ();
 }
 	
+void startStabalizer ()
+{
+  stabalizer.writeMicroseconds(MAX_PWM); 
+  delayMicroseconds(1000);
+}
+
+void startStabalizer ()
+{
+  stabalizer.writeMicroseconds(MIN_PWM); 
+  delayMicroseconds(1000);
+}
+
+void mapInputs ()
+{
+	pitch_output = map (pitch_input, -100, 100, MIN_PWM, MAX_PWM); 
+	roll_output = map (roll_input, -100, 100, MIN_PWM, MAX_PWM); 
+	throttle_output = map (throttle_input, 0, 100, MIN_PWM, MAX_PWM); 
+	yaw_output = map (yaw_input, -100, 100, MIN_PWM, MAX_PWM); 
+	if (arm_input)
+	{
+		if (!COPTER_ARMED)
+		{
+                        if (!STABALIZED) 
+                        {
+                                startStabalizer ();
+                        }
+			arm ();
+			COPTER_ARMED = 1;
+		}
+	}
+	if (!arm_input)
+	{
+		if (COPTER_ARMED)
+		{
+
+			unarm ();
+			COPTER_ARMED = 0;
+                        if (STABALIZED) 
+                        {
+                                quitStabalizer ();
+                        }
+		}
+	}
+}
+
 void resetOutputs ()
 {
 	pitch_output = MID_PWM;
@@ -60,7 +108,8 @@ void parseSerial ()
 		pitch_input = Serial.parseInt(); 
 		yaw_input = Serial.parseInt(); 
 		roll_input = Serial.parseInt(); 
-		z_input = Serial.parseInt(); 
+		throttle_input = Serial.parseInt(); 
+		arm_input = Serial.parseInt();
 
 		if (Serial.read() == '\n') 
 		{
@@ -70,34 +119,45 @@ void parseSerial ()
 			Serial.print (" ");
 			Serial.print(roll_input);
 			Serial.print (" ");
-			Serial.println(z_input);
+			Serial.print(throttle_input);
+			Serial.println(arm_input);
+			Serial.print (" ");
+
 			return;
 		}
 	}
 }
 
-void arm(){
-	throttle_output = MIN_PWM;
-	yaw_output = MIN_PWM;
-	sendCommand();
+void arm()
+{
+	if (throttle_output == MIN_PWM)
+	{
+		resetOutputs ();
 
-	delay(2000);
+		throttle_output = MIN_PWM;
+		yaw_output = MIN_PWM;
+		sendCommand();
 
-	yaw_output = MID_PWM;
+		delay(2000);
+
+		yaw_output = MID_PWM;
+	}
 }
 
-void unarm(){
-    temp[0] = control_vector[yaw];
-    //temp[1] = control_vector[roll];
-    //temp[2] = control_vector[pitch];
-    //control_vector[roll] = 1950;
-    //control_vector[pitch] = 1950;
-    control_vector[yaw] = 1950;
-    sendCommand();
-    delay(2000);
-    control_vector[yaw] = temp[0];
-    //control_vector[roll] = temp[1];
-    //control_vector[pitch] = temp[2];
+void unarm()
+{
+	if (throttle_output == MIN_PWM)
+	{
+		resetOutputs ();
+
+		throttle_output = MIN_PWM;
+		yaw_output = MAX_PWM;
+		sendCommand();
+
+		delay(2000);
+
+		yaw_output = MID_PWM;
+	}
 }
 
 void sendCommand(){

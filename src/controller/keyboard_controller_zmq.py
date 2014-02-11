@@ -17,6 +17,7 @@ class keyboard_controller ():
 		self.roll = 0
 		self.yaw = 0
 		self.z = 0
+		self.arm = 0
 
 		self.control_incrementer = 0.1
 
@@ -38,16 +39,19 @@ class keyboard_controller ():
 		print "e = pivot rigtht"
 		print "r = ascend"
 		print "f = descend"
+		print "o = ARM"
+		print "l = UNARM"
 		print "p = exit"
 
 	def parsekey (self, key):
 		# TODO: Implement ramping feature
-		controls = {"Pitch":0, "Roll":0, "Yaw":0, "Z":0}
+		controls = {"Pitch":0, "Roll":0, "Yaw":0, "Z":0, "Arm":0}
 
 		controls["Pitch"] = self.pitch
 		controls["Roll"] = self.roll
 		controls["Yaw"] = self.yaw
 		controls["Z"] = self.z
+		controls["Arm"] = self.arm
 
 		if key.lower() == 'w':
 			if self.pitch < 0:
@@ -99,9 +103,9 @@ class keyboard_controller ():
 			controls["Z"] = self.z
 
 		elif key.lower() == 'f':
-			if self.z > 0:
-				self.z = 0.0
 			self.z -= self.control_incrementer
+			if self.z < 0:
+				self.z = 0.0
 
 			controls["Z"] = self.z
 
@@ -113,12 +117,19 @@ class keyboard_controller ():
 			self.yaw = 0
 			self.z = 0
 
+		elif key.lower() == 'o':
+			self.arm = 1
+
+		elif key.lower() == 'l':
+			self.arm = 0
+
 		else:
-			controls = {"Pitch":0, "Roll":0, "Yaw":0, "Z":0}
+			controls["Pitch"] = 0
+			controls["Yaw"] = 0
+			controls["Roll"] = 0
 			self.roll = 0
 			self.pitch = 0
 			self.yaw = 0
-			self.z = 0
 
 		self.sanitize_controls (controls)
 
@@ -142,6 +153,9 @@ class keyboard_controller ():
 			controls["Z"] = 1.0
 		if controls["Z"] < -1.0:
 			controls["Z"] = -1.0
+
+		if controls["Arm"]:
+			controls["Arm"] = 1 
 
 		self.send_controls (controls)
 	
