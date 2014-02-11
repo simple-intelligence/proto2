@@ -23,6 +23,7 @@ int throttle_output = 0;
 int yaw_output = 0;
 
 int COPTER_ARMED = 0;
+int STABALIZED = 0;
 
 void setup(){
 	pitch_pin.attach(A5);   	
@@ -52,7 +53,7 @@ void startStabalizer ()
   delayMicroseconds(1000);
 }
 
-void startStabalizer ()
+void quitStabalizer ()
 {
   stabalizer.writeMicroseconds(MIN_PWM); 
   delayMicroseconds(1000);
