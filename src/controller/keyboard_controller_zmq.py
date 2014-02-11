@@ -111,16 +111,25 @@ class keyboard_controller ():
 
 		elif key.lower() == 'p':
 			self.exit = 1
-			controls = {"Pitch":0, "Roll":0, "Yaw":0, "Z":0}
+			controls = {"Pitch":0, "Roll":0, "Yaw":0, "Z":0, "Arm": 0}
 			self.roll = 0
 			self.pitch = 0
 			self.yaw = 0
 			self.z = 0
+			self.arm = 0
 
 		elif key.lower() == 'o':
 			self.arm = 1
 
 		elif key.lower() == 'l':
+			self.arm = 0
+
+		elif key.lower() == 'm':
+			controls = {"Pitch":0, "Roll":0, "Yaw":0, "Z":0, "Arm": 0}
+			self.roll = 0
+			self.pitch = 0
+			self.yaw = 0
+			self.z = 0
 			self.arm = 0
 
 		else:
