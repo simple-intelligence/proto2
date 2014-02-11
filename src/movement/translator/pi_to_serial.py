@@ -16,8 +16,8 @@ def setup_serial ():
 
 def send_flight_controls (pitch, yaw, roll, z):
 	if ser.isOpen ():
-		ser.write ("{p},{y},{r},{z_pos}".format (p=pitch, y=yaw, r=roll, z_pos=z))
-		print "{p} {y} {r} {z_pos}".format (p=pitch, y=yaw, r=roll, z_pos=z)
+		ser.write ("{p},{y},{r},{z_pos}\n".format (p=int (pitch), y=int (yaw), r=int (roll), z_pos=int (z)))
+		print "{p} {y} {r} {z_pos}\n".format (p=int (pitch), y=int (yaw), r=int (roll), z_pos=int (z))
 	
 
 def main ():
@@ -27,7 +27,7 @@ def main ():
 	while True:
 		msg = {"message":0, "time":0}
 		msg = com.get_message ("Direction")
-		print msg
+		#print msg
 		if msg and msg["time"] > last_timestamp:
 			last_timestamp = msg["time"]
 	
@@ -37,7 +37,7 @@ def main ():
 			z = msg["message"]["Z"] * 100
 
 			send_flight_controls (pitch, yaw, roll, z)
-		sleep (.5)
+		sleep (.05)
 
 if __name__=="__main__":
 	setup_serial ()
