@@ -1,11 +1,12 @@
 #include <Servo.h>
 
 #define NUM_MOTORS 4
-#define MIN_PWM 820 // THESE CAN CHANGE DEPENDING ON INTERNAL VOLTAGE BLACK MAGIC
-#define MID_PWM 1509 // THESE CAN CHANGE DEPENDING ON INTERNAL VOLTAGE BLACK MAGIC
-#define MAX_PWM 2197 // THESE CAN CHANGE DEPENDING ON INTERNAL VOLTAGE BLACK MAGIC
+#define MIN_THROTTLE 1100 // THESE CAN CHANGE DEPENDING ON INTERNAL VOLTAGE BLACK MAGIC
+#define MIN_PWM 800 // THESE CAN CHANGE DEPENDING ON INTERNAL VOLTAGE BLACK MAGIC
+#define MID_PWM 1500 // THESE CAN CHANGE DEPENDING ON INTERNAL VOLTAGE BLACK MAGIC
+#define MAX_PWM 2195 // THESE CAN CHANGE DEPENDING ON INTERNAL VOLTAGE BLACK MAGIC
 
-Servo pitch_pin; 
+Servo pitch_pin;
 Servo roll_pin;
 Servo throttle_pin;
 Servo yaw_pin;
@@ -63,7 +64,7 @@ void mapInputs ()
 {
 	pitch_output = map (pitch_input, -100, 100, MIN_PWM, MAX_PWM); 
 	roll_output = map (roll_input, -100, 100, MIN_PWM, MAX_PWM); 
-	throttle_output = map (throttle_input, 0, 100, MIN_PWM, MAX_PWM); 
+	throttle_output = map (throttle_input, 0, 100, MIN_THROTTLE, MAX_PWM); 
 	yaw_output = map (yaw_input, -100, 100, MIN_PWM, MAX_PWM); 
 
 	if (arm_input)
@@ -97,7 +98,7 @@ void resetOutputs ()
 {
 	pitch_output = MID_PWM;
 	roll_output = MID_PWM;
-	throttle_output = MIN_PWM;
+	throttle_output = MIN_THROTTLE;
 	yaw_output = MID_PWM;
 	sendCommand ();
 }
@@ -115,28 +116,29 @@ void parseSerial ()
 
 		if (Serial.read() == '\n') 
 		{
-			Serial.print(pitch_input);
-			Serial.print (" ");
-			Serial.print(yaw_input);
-			Serial.print (" ");
-			Serial.print(roll_input);
-			Serial.print (" ");
-			Serial.print(throttle_input);
-			Serial.println(arm_input);
-			Serial.print (" ");
+			//Serial.print(pitch_input);
+			//Serial.print (" ");
+			//Serial.print(yaw_input);
+			//Serial.print (" ");
+			//Serial.print(roll_input);
+			//Serial.print (" ");
+			//Serial.print(throttle_input);
+			//Serial.println(arm_input);
+			//Serial.print (" ");
 
 			return;
 		}
+                
 	}
 }
 
 void arm()
 {
-	if (throttle_output == MIN_PWM)
+	if (throttle_output == MIN_THROTTLE)
 	{
 		resetOutputs ();
 
-	        throttle_output = MIN_PWM;
+		throttle_output = MIN_THROTTLE;
 		yaw_output = MIN_PWM;
 		sendCommand();
 
@@ -148,11 +150,11 @@ void arm()
 
 void unarm()
 {
-	if (throttle_output == MIN_PWM)
+	if (throttle_output == MIN_THROTTLE)
 	{
 		resetOutputs ();
 
-		throttle_output = MIN_PWM;
+		throttle_output = MIN_THROTTLE;
 		yaw_output = MAX_PWM;
 		sendCommand();
 
