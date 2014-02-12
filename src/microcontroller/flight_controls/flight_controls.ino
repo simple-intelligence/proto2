@@ -1,9 +1,9 @@
 #include <Servo.h>
 
 #define NUM_MOTORS 4
-#define MIN_PWM 800
-#define MID_PWM 1499
-#define MAX_PWM 2197
+#define MIN_PWM 820 // THESE CAN CHANGE DEPENDING ON INTERNAL VOLTAGE BLACK MAGIC
+#define MID_PWM 1509 // THESE CAN CHANGE DEPENDING ON INTERNAL VOLTAGE BLACK MAGIC
+#define MAX_PWM 2197 // THESE CAN CHANGE DEPENDING ON INTERNAL VOLTAGE BLACK MAGIC
 
 Servo pitch_pin; 
 Servo roll_pin;
@@ -26,11 +26,11 @@ int COPTER_ARMED = 0;
 int STABALIZED = 0;
 
 void setup(){
-	pitch_pin.attach(A5);   	
+	pitch_pin.attach(A1);   	
 	roll_pin.attach(A4);
 	throttle_pin.attach(A3);
 	yaw_pin.attach(A2);
-        stabalizer.attach (A0);	
+	stabalizer.attach (A0);	
       
 	resetOutputs ();
 
@@ -65,14 +65,15 @@ void mapInputs ()
 	roll_output = map (roll_input, -100, 100, MIN_PWM, MAX_PWM); 
 	throttle_output = map (throttle_input, 0, 100, MIN_PWM, MAX_PWM); 
 	yaw_output = map (yaw_input, -100, 100, MIN_PWM, MAX_PWM); 
+
 	if (arm_input)
 	{
 		if (!COPTER_ARMED)
 		{
-                        if (!STABALIZED) 
-                        {
-                                startStabalizer ();
-                        }
+			if (!STABALIZED) 
+				{
+						startStabalizer ();
+				}
 			arm ();
 			COPTER_ARMED = 1;
 		}
@@ -84,10 +85,10 @@ void mapInputs ()
 
 			unarm ();
 			COPTER_ARMED = 0;
-                        if (STABALIZED) 
-                        {
-                                quitStabalizer ();
-                        }
+			if (STABALIZED) 
+				{
+						quitStabalizer ();
+				}
 		}
 	}
 }
@@ -135,7 +136,7 @@ void arm()
 	{
 		resetOutputs ();
 
-		throttle_output = MIN_PWM;
+	        throttle_output = MIN_PWM;
 		yaw_output = MIN_PWM;
 		sendCommand();
 
@@ -161,7 +162,11 @@ void unarm()
 	}
 }
 
-void sendCommand(){
+void sendCommand()
+{
+    yaw_pin.writeMicroseconds(yaw_output);
+    delayMicroseconds(1000);
+
     pitch_pin.writeMicroseconds(pitch_output); 
     delayMicroseconds(1000);   
 
@@ -169,9 +174,6 @@ void sendCommand(){
     delayMicroseconds(1000); 
 
     throttle_pin.writeMicroseconds(throttle_output);
-    delayMicroseconds(1000);
-
-    yaw_pin.writeMicroseconds(yaw_output);
     delayMicroseconds(1000);
 }
 
