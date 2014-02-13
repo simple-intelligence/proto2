@@ -2,7 +2,7 @@
 	"Direction": {
 		"IP": "127.0.0.1",
 		"Port": "5001",
-		"Update_Frequency": 0.01,
+		"Update_Frequency": 0.001,
 		"Listening":[
 			"Controller",
 			"AI"

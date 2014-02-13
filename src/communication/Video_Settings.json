@@ -1,7 +1,7 @@
 {
-	"Reciever_IP": "10.99.66.83",
+	"Reciever_IP": "127.0.0.1",
 	"Reciever_Port": "7000",
-	"Server_IP": "10.99.66.83",
+	"Server_IP": "127.0.0.1",
 	"Server_Port": "7001",
 	"Downward": {
 		"Index": 0,
