@@ -52,7 +52,8 @@ while True:
 		control_out['Y2'] = 255 - control_out['Y2']
 
 		for i in control_out.keys ():
-			control_out[i] = control_out[i] / 255.0
+			control_out[i] = (control_out[i] / 255.0) - 0.5
+			if control_out[i] < .15 and control_out[i] > -.15: control_out[i] = 0
 
 
 		final_packet = {"Pitch":control_out["Y2"], "Yaw":control_out["X1"], "Roll":control_out["X2"], "Z":control_out["Y1"], "Arm":0}

@@ -8,7 +8,7 @@ import serial
 sys.path.append (os.path.abspath("../../"))
 from communication.zmq_communicator import communicator
 
-ser = serial.Serial (port = "/dev/ttyACM0", baudrate=9600)
+ser = serial.Serial (port = "/dev/ttyACM1", baudrate=9600)
 
 def setup_serial ():
 	ser.close ()

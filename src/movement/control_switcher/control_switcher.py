@@ -26,7 +26,7 @@ class directive ():
 			print 
 			self.com.send_message (self.control_msg["message"])
 
-		time.sleep (.001)
+		time.sleep (.1)
 
 if __name__=="__main__":
 	drone_control = directive ()
