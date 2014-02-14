@@ -65,6 +65,8 @@ while True:
 		final_packet = {"Pitch":control_out["Y2"], "Yaw":control_out["X1"], "Roll":control_out["X2"], "Z":control_out["Y1"], "Arm":0}
 
 		final_packet["Arm"] = IS_ARMED
+		final_packet["Pitch"] = -final_packet["Pitch"]
+		final_packet["Yaw"] = -final_packet["Yaw"]
 
 		if IS_ARMED:
 			if control_out['[]'] > 0: 
@@ -75,6 +77,10 @@ while True:
 				final_packet["Arm"] = 1
 				IS_ARMED = 1
 
+		for i in final_packet.keys ():
+			final_packet[i] = final_packet[i] / 2.0
+
+		final_packet["Arm"] = final_packet["Arm"] * 2.0
 		#print final_packet
 		#com.send_message (final_packet)
 
