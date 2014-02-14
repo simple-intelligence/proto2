@@ -106,15 +106,23 @@ void resetOutputs ()
 	
 void parseSerial ()
 {
-	while (Serial.available() > 0) 
+        int i = 0;
+	while (Serial.available() > 0)
 	{
+                // Synchronize to leading 'B'
+                do
+                {
+                    i = Serial.read ();
+                }
+                while (i != 'B');
+                
 		pitch_input = Serial.parseInt(); 
 		yaw_input = Serial.parseInt(); 
 		roll_input = Serial.parseInt(); 
 		throttle_input = Serial.parseInt(); 
 		arm_input = Serial.parseInt();
 
-		if (Serial.read() == '\n') 
+		if (Serial.read() == '\n')
 		{
 			//Serial.print(pitch_input);
 			//Serial.print (" ");
