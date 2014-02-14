@@ -66,6 +66,7 @@ class communicator ():
 
 		self.publisher["context"] = zmq.Context ()	
 		self.publisher["socket"] = self.publisher["context"].socket (zmq.PUB)
+		self.publisher["socket"].setsockopt (zmq.HWM, 15)
 		self.publisher["socket"].bind ("tcp://" + self.settings[module_name]["IP"] + ":" + self.settings[module_name]["Port"])
 
 		# Setting up subscribers
@@ -80,6 +81,7 @@ class communicator ():
 
 			self.subscriber[module]["socket"] = self.subscriber[module]["context"].socket (zmq.SUB)
 			self.subscriber[module]["socket"].setsockopt (zmq.SUBSCRIBE, "")
+			self.subscriber[module]["socket"].setsockopt (zmq.HWM, 15)
 			self.subscriber[module]["socket"].connect ("tcp://" + self.settings[module]["IP"] + ":" + self.settings[module]["Port"])
 			#self.subscriber[module]["queue"] = Queue.Queue () # Currently unnecessary
 			self.subscriber[module]["msg"] = None

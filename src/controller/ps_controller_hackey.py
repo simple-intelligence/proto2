@@ -6,23 +6,27 @@ from time import sleep
 sys.path.append (os.path.abspath("../"))
 from communication.zmq_communicator import communicator
 
+final_packet = {"Pitch":0, "Yaw":0, "Roll":0, "Z":0, "Arm":0}
+com = communicator ("Controller")
+
 class msg_passer (threading.Thread):
 	def __init__(self):
 		threading.Thread.__init__(self)
 
 	def run (self):
 		while True:
-			com.send_message (final_packet)
-			print sent
-			sleep (.05)
+			try:
+				com.send_message (final_packet)
+				print final_packet
+			except:
+				pass
+			sleep (1)
 
 IS_ARMED = 0
 
-final_packet = {"Pitch":0, "Yaw":0, "Roll":0, "Z":0, "Arm":0}
-com = communicator ("Controller")
-
-#passer = msg_passer ()
-#passer.start ()
+passer = msg_passer ()
+passer.daemon = True
+passer.start ()
 
 while True:
 	controls = sys.stdin.readline ()
@@ -69,7 +73,7 @@ while True:
 				final_packet["Arm"] = 1
 				IS_ARMED = 1
 
-		print final_packet
+		#print final_packet
 		com.send_message (final_packet)
 
 	except KeyError:
