@@ -3,11 +3,7 @@ import os
 import threading
 from time import sleep
 
-sys.path.append (os.path.abspath("../"))
-from communication.zmq_communicator import communicator
-
 final_packet = {"Pitch":0, "Yaw":0, "Roll":0, "Z":0, "Arm":0}
-com = communicator ("Controller")
 
 class msg_passer (threading.Thread):
 	def __init__(self):
@@ -16,7 +12,6 @@ class msg_passer (threading.Thread):
 	def run (self):
 		while True:
 			try:
-				com.send_message (final_packet)
 				print final_packet
 			except:
 				pass
@@ -30,7 +25,6 @@ passer.start ()
 
 while True:
 	controls = sys.stdin.readline ()
-
 
 	x1 = controls[0:6]
 	y1 = controls[7:13]
@@ -82,7 +76,6 @@ while True:
 
 		final_packet["Arm"] = final_packet["Arm"] * 2.0
 		#print final_packet
-		#com.send_message (final_packet)
 
 	except KeyError:
 		pass
