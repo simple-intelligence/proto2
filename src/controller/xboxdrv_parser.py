@@ -41,29 +41,41 @@ class Controller:
                 except ValueError:
                     pass
 
-    def __init__(self, _return_values=None, _return_as=None, _in_range=None, _out_range=None):
+    def __init__(self, return_values=None, return_as=None, in_range=None, out_range=None):
         """
-        return_values is a list of the values to return from the controller. use get_input_names()
-        to get the names of these values.
+        Controller() is a class for getting input values from an xbox/playstation or other controller
+        recognized by the program xboxdrv. By default Controller returns values for every button on the 
+        controller as a dictionary.
+
+        Optional Parameters:
+        return_values is an optional list of the values to return from the controller. use get_input_names()
+            to get the names of these values.
         return_as is an optional list of names to return the input values as. it must be the same length 
-        as return_values
+            as return_values
+        in_range is an optional tuple in the format (min, max) where min is the lowest incoming value and max
+            the greatest
+        out_range is an optional tuple in the format (min, max) where min is the lowest desired outgoing value and max
+            the greatest
+
+        Note:
+        return_values may be present while return_as can still be none, however, in_range and out_range must both exist
         """
-        if _return_values and _return_as:
-            if not len (_return_values) == len (_return_as):
+        if return_values and return_as:
+            if not len (return_values) == len (return_as):
                 sys.exit ("return_values and return_as must be the same length!")
-        elif _return_as and not _return_values:
+        elif return_as and not return_values:
                 sys.exit ("No values to return!")
 
-        if not _in_range and not _out_range:
+        if not in_range and not out_range:
             pass
-        elif len (_in_range) !=2 or len (_out_range) != 2:
+        elif len (in_range) !=2 or len (out_range) != 2:
             sys.exit ("in_range and out_range must be in format: (min, max)")
         
-        self.in_range = _in_range
-        self.out_range = _out_range
+        self._in_range = _in_range
+        self._out_range = _out_range
             
-        self.return_values = _return_values
-        self.return_as = _return_as
+        self._return_values = _return_values
+        self._return_as = _return_as
 
         controller = subprocess.Popen (["sudo", "xboxdrv", "-d"], stdout=subprocess.PIPE)
 
@@ -78,7 +90,7 @@ class Controller:
 
     def map_range (self, x, in_min, in_max, out_min, out_max):
         """
-        map_range the inputs values ranging from in_min to in_max to output values
+        map_range() maps the inputs values ranging from in_min to in_max to output values
         ranging from out_min to out_max. This can handle both negative and positive
         min and max values
         """
@@ -91,10 +103,9 @@ class Controller:
 
     def get_input_names (self):
         """
-        return a list of the names of all the values coming from xboxdrv.
-        this could fail if the parser catches a line from the info text
-        that xboxdrv puts out
+        get_input_names() returns a list of the names of all the values coming from xboxdrv.
         """
+        #TODO: this could fail if the parser catches a line from the info text that xboxdrv puts out
         while not self.line_parser.control_inputs:
             pass
 
@@ -111,18 +122,18 @@ class Controller:
         self.outputs = {}
 
         # Changes return values names to specified names
-        if self.return_values and self.return_as:
+        if self._return_values and self._return_as:
             try:
-                for key in range (len (self.return_values)):
-                    self.outputs [str (self.return_as[key])] = self.line_parser.control_inputs[self.return_values[key]]
+                for key in range (len (self._return_values)):
+                    self.outputs [str (self._return_as[key])] = self.line_parser.control_inputs[self._return_values[key]]
             except KeyError:
                 pass
 
         # Does not change names but does only return specified value
-        elif self.return_values and not self.return_as:
+        elif self._return_values and not self._return_as:
             try:
-                for key in range (len (self.return_values)):
-                    self.outputs [str (self.return_values[key])] = self.line_parser.control_inputs[self.return_values[key]]
+                for key in range (len (self._return_values)):
+                    self.outputs [str (self._return_values[key])] = self.line_parser.control_inputs[self.return_values[key]]
             except KeyError:
                 pass
 
@@ -130,8 +141,8 @@ class Controller:
             self.outputs = self.line_parser.control_inputs
 
         # Maps values to a range
-        if self.in_range and self.out_range:
+        if self._in_range and self._out_range:
             for key in self.outputs:
-                self.outputs[key] = self.map_range (self.outputs[key], self.in_range[0], self.in_range[1], self.out_range[0], self.out_range[1])
+                self.outputs[key] = self.map_range (self.outputs[key], self._in_range[0], self.in_range[1], self._out_range[0], self.out_range[1])
 
         return self.outputs
