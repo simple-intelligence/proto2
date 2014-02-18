@@ -141,7 +141,7 @@ class Controller:
         elif self._return_values and not self._return_as:
             try:
                 for key in range (len (self._return_values)):
-                    self.outputs [str (self._return_values[key])] = self.line_parser.control_inputs[self.return_values[key]]
+                    self.outputs [str (self._return_values[key])] = self.line_parser.control_inputs[self._return_values[key]]
             except KeyError:
                 pass
 
@@ -150,7 +150,8 @@ class Controller:
 
         # Maps values to a range
         if self._in_range and self._out_range:
+            """
             for key in self.outputs:
-                self.outputs[key] = self.map_range (self.outputs[key], self._in_range[0], self.in_range[1], self._out_range[0], self.out_range[1])
+                self.outputs[key] = self.map_range (self.outputs[key], self._in_range[0], self._in_range[1], self._out_range[0], self._out_range[1])
 
         return self.outputs
