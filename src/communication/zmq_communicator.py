@@ -1,6 +1,5 @@
 import sys
 import os
-import Queue
 import json
 import threading
 from time import time, sleep
@@ -25,7 +24,7 @@ class communicator ():
 	Heavily inspired by work done by Logan Evans for the Robosub of the Palouse club.
 	"""
 
-	class queue_refresher (threading.Thread):
+	class updater (threading.Thread):
 		"""
 		This is a constantly running thread that updates the currently sent msg.
 		Currently it only writes to a single msg value rather than a queue but that
@@ -40,7 +39,7 @@ class communicator ():
 		def run (self):
 			while True:
 				for module in self.com.get_listening_to():
-					self.com.update_queue (module)
+					self.com.update_last_msg (module)
 				sleep (self.update_freq)
 	
 	def __init__(self, module_name, settings_file=None):
@@ -64,6 +63,7 @@ class communicator ():
 		self.publisher = {}
 		self.publisher["mname"] = module_name
 
+        # TODO: Make a single context for all subscribers and one for publisher
 		self.publisher["context"] = zmq.Context ()	
 		self.publisher["socket"] = self.publisher["context"].socket (zmq.PUB)
 		self.publisher["socket"].setsockopt (zmq.HWM, 15)
@@ -74,6 +74,7 @@ class communicator ():
 		for module in self.settings[self.publisher["mname"]]["Listening"]:
 			self.listening_to.append (module)
 
+        # TODO: Make a single context for all subscribers and one for publisher
 		self.subscriber = {}
 		for module in self.listening_to:
 			self.subscriber[module] = {}
@@ -83,12 +84,10 @@ class communicator ():
 			self.subscriber[module]["socket"].setsockopt (zmq.SUBSCRIBE, "")
 			self.subscriber[module]["socket"].setsockopt (zmq.HWM, 15)
 			self.subscriber[module]["socket"].connect ("tcp://" + self.settings[module]["IP"] + ":" + self.settings[module]["Port"])
-			#self.subscriber[module]["queue"] = Queue.Queue () # Currently unnecessary
 			self.subscriber[module]["msg"] = None
-			#self.subscriber[module]["raw_msg"] = None # Unused
 				
 		# Setting up refresher system
-		self.refresher = self.queue_refresher (communicator=self, update_frequency=self.settings[module_name]["Update_Frequency"]) 
+		self.refresher = self.updater (communicator=self, update_frequency=self.settings[module_name]["Update_Frequency"]) 
 		self.refresher.daemon = True
 		self.refresher.start()
 
@@ -103,24 +102,12 @@ class communicator ():
 		self.publisher["socket"].send_json (msg)
 
 	def get_message (self, module):
-		"""
-		if not self.subscriber[module]["queue"].empty (): 
-			return self.subscriber[module]["queue"].get_nowait ()
-		else:
-			pass
-		"""
 		try:
 			return self.subscriber[module]["msg"]
 		except:
 			pass	
 
-	def update_queue (self, module):
-		"""
-		try:
-			self.subscriber[module]["queue"].put_nowait (self.subscriber[module]["socket"].recv_json ())
-		except KeyError:
-			sys.stderr.write ("[{mname}] does not subscribe to [{subscriber}]\n".format (mname = self.publisher["mname"], subscriber = module))
-		"""
+	def update_last_msg (self, module):
 		try:
 			self.subscriber[module]["msg"] = self.subscriber[module]["socket"].recv_json (zmq.DONTWAIT)
 		except:

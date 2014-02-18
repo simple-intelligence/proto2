@@ -5,9 +5,9 @@ import time
 sys.path.append (os.path.abspath("../../"))
 from communication.zmq_communicator import communicator
 
-class directive ():
+class control_switcher ():
 	def __init__(self):
-		self.com = communicator ("Direction")
+		self.com = communicator ("Switcher")
 		self.last_timestamp = 0
 		self.control_msg = {"time": 0}
 
@@ -16,6 +16,7 @@ class directive ():
 		self.send_controls ()
 
 	def get_controls (self):
+        # This is where inputs are switched. Much more logic is needed here
 		self.control_msg = self.com.get_message ("Controller")
 		#self.control_msg = self.com.get_message ("AI")
 	
@@ -29,6 +30,6 @@ class directive ():
 		time.sleep (.1)
 
 if __name__=="__main__":
-	drone_control = directive ()
+	drone_control = control_switcher ()
 	while True:
 		drone_control.run ()

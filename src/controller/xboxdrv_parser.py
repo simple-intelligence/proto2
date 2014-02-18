@@ -20,7 +20,14 @@ class Controller:
                 line = self.xboxdrv.stdout.readline ()
 
                 try:
-                    # This is a somewhat hackey method but it should work for all controllers that xboxdrv can handle
+                    """
+                    This is a somewhat hackey method but it should work for all controllers that xboxdrv can handle.
+                    
+                    xboxdrv prints off controller inputs as "X1:120 Y1: 10 select:1" etc...
+                    Just splitting by spaces does not work as it would seperate "Y1:" and "10". 
+                    This method removes all spaces after a ":" but does not affect the spaces after the numerical
+                    value of an input.
+                    """
                     line = line.replace (":      ", ":     ")
                     line = line.replace (":     ",  ":    ")
                     line = line.replace (":    ",   ":   ")
@@ -28,6 +35,7 @@ class Controller:
                     line = line.replace (":  ",     ": ")
                     line = line.replace (": ",      ":")
 
+                    # Sometimes there's two spaces a value; replace with one
                     line = line.replace ("  ", " ")
 
                     entries = line.split (" ")
@@ -71,11 +79,11 @@ class Controller:
         elif len (in_range) !=2 or len (out_range) != 2:
             sys.exit ("in_range and out_range must be in format: (min, max)")
         
-        self._in_range = _in_range
-        self._out_range = _out_range
+        self._in_range = in_range
+        self._out_range = out_range
             
-        self._return_values = _return_values
-        self._return_as = _return_as
+        self._return_values = return_values
+        self._return_as = return_as
 
         controller = subprocess.Popen (["sudo", "xboxdrv", "-d"], stdout=subprocess.PIPE)
 

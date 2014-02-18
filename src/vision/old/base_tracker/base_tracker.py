@@ -9,6 +9,9 @@ sys.path.append (os.path.abspath("../../../"))
 from communication.zmq_communicator import communicator
 
 class Base_Finder:
+    """
+    This is all used in vision_reciever.py
+    """
 	def __init__(self):
 		self.images = {}
 	
@@ -36,6 +39,7 @@ class Base_Finder:
 		#self.param2 += 1
 		#print self.param2
 
+        # Find better way. HoughCircles sucks: It is incredibly slow if many circles are found.
 		self.outputs["Circles"] = cv2.HoughCircles (self.images["Color_Filter"], cv2.cv.CV_HOUGH_GRADIENT, 2, 100, param1=self.param1, param2=self.param2, minRadius=10, maxRadius=240)
 
 		print self.outputs["Circles"]

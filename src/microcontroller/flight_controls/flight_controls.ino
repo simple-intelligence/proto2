@@ -1,6 +1,5 @@
 #include <Servo.h>
 
-#define NUM_MOTORS 4
 #define MIN_THROTTLE 1100 // THESE CAN CHANGE DEPENDING ON INTERNAL VOLTAGE BLACK MAGIC
 #define MIN_PWM 800 // THESE CAN CHANGE DEPENDING ON INTERNAL VOLTAGE BLACK MAGIC
 #define MID_PWM 1500 // THESE CAN CHANGE DEPENDING ON INTERNAL VOLTAGE BLACK MAGIC
@@ -12,17 +11,20 @@ Servo throttle_pin;
 Servo yaw_pin;
 Servo stabalizer;
 
+// Inputs from usb serial
 int pitch_input = 0;
 int roll_input = 0;
 int throttle_input = 0;
 int yaw_input = 0;
 int arm_input = 0;
 
+// Actual pwm timing outputs for each motor
 int pitch_output = 0;
 int roll_output = 0;
 int throttle_output = 0;
 int yaw_output = 0;
 
+// Used so that arming/stabalization persists
 int COPTER_ARMED = 0;
 int STABALIZED = 0;
 
@@ -33,6 +35,7 @@ void setup(){
 	yaw_pin.attach(A2);
 	stabalizer.attach (A0);	
       
+    // Sets outputs to min
 	resetOutputs ();
 
 	Serial.begin(9600);
@@ -71,6 +74,8 @@ void mapInputs ()
 	{
 		if (!COPTER_ARMED)
 		{
+            // Start stabalizer before arming
+            // startStabalizer definetely working
 			if (!STABALIZED) 
 				{
 						startStabalizer ();
@@ -86,6 +91,8 @@ void mapInputs ()
 
 			unarm ();
 			COPTER_ARMED = 0;
+            // End stabalizer after unarming
+            // quitStabalizer does not appear to be working well but it should not matter
 			if (STABALIZED) 
 				{
 						quitStabalizer ();
@@ -96,17 +103,17 @@ void mapInputs ()
 
 void resetOutputs ()
 {
-	pitch_output = MID_PWM;
-	roll_output = MID_PWM;
-	throttle_output = MIN_THROTTLE;
-	yaw_output = MID_PWM;
-	sendCommand ();
+    pitch_output = MID_PWM;
+    roll_output = MID_PWM;
+    throttle_output = MIN_THROTTLE;
+    yaw_output = MID_PWM;
+    sendCommand ();
 }
 
 	
 void parseSerial ()
 {
-        int i = 0;
+    int i = 0;
 	while (Serial.available() > 0)
 	{
                 // Synchronize to leading 'B'
@@ -142,6 +149,7 @@ void parseSerial ()
 
 void arm()
 {
+    // Safeguard against arming and immedietly taking off
 	if (throttle_output == MIN_THROTTLE)
 	{
 		resetOutputs ();
@@ -158,6 +166,7 @@ void arm()
 
 void unarm()
 {
+    // Safegaurd against unarming in midair
 	if (throttle_output == MIN_THROTTLE)
 	{
 		resetOutputs ();

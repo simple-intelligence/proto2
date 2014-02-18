@@ -86,7 +86,6 @@ def main ():
 
 	pos = (0, 0, 0)
 
-	#reciever.ready_up () # This is necessary since zmq will always drop the first (at least) message. This is the initial connect
 	while True:
 		frame = reciever.get_frame ()
 
