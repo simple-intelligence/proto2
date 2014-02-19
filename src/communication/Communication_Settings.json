@@ -1,6 +1,6 @@
 {
 	"Switcher": {
-		"IP": "127.0.0.1",
+		"IP": "10.99.66.117",
 		"Port": "5001",
 		"Update_Frequency": 0.001,
 		"Listening":[
@@ -9,7 +9,7 @@
 			]
 		},
 	"Translator": {
-		"IP": "127.0.0.1",
+		"IP": "10.99.66.86",
 		"Port": "5002",
 		"Update_Frequency": 0.01,
 		"Listening":[
@@ -17,13 +17,13 @@
 			]
 		},
 	"Controller": {
-		"IP": "127.0.0.1",
+		"IP": "10.99.66.86",
 		"Port": "5000",
 		"Update_Frequency": 0.1,
 		"Listening":[]
 		},
 	"Pinger_Base": {
-		"IP": "127.0.0.1",
+		"IP": "10.99.66.86",
 		"Port": "6001",
 		"Update_Frequency": 0.1,
 		"Listening":[
@@ -31,7 +31,7 @@
 			]
 		},
 	"Pinger_Copter": {
-		"IP": "127.0.0.1",
+		"IP": "10.99.66.86",
 		"Port": "6000",
 		"Update_Frequency": 0.1,
 		"Listening":[
@@ -39,7 +39,7 @@
 			]
 		},
 	"Logger": {
-		"IP": "127.0.0.1",
+		"IP": "10.99.66.86",
 		"Port": "5020",
 		"Update_Frequency": 0.01,
 		"Listening":[
@@ -49,7 +49,7 @@
 			]
 		},
 	"AI": {
-		"IP": "127.0.0.1",
+		"IP": "10.99.66.86",
 		"Port": "8000",
 		"Update_Frequency": 0.01,
 		"Listening":[
@@ -57,7 +57,7 @@
 			]
 		},
 	"Base_Finder": {
-		"IP": "127.0.0.1",
+		"IP": "10.99.66.86",
 		"Port": "8001",
 		"Update_Frequency": 0.01,
 		"Listening":[]

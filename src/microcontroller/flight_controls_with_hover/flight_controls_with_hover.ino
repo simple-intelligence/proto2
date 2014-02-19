@@ -87,6 +87,7 @@ void getHeight ()
     delay(5);
 }
 
+
 void startStabalizer ()
 {
   stabalizer.writeMicroseconds(MAX_PWM); 
@@ -101,11 +102,6 @@ void quitStabalizer ()
 
 void mapInputs ()
 {
-    pitch_output = map (pitch_input, -100, 100, MIN_PWM, MAX_PWM); 
-    roll_output = map (roll_input, -100, 100, MIN_PWM, MAX_PWM); 
-    throttle_output = map (throttle_input, 0, 100, MIN_THROTTLE, MAX_PWM); 
-    yaw_output = map (yaw_input, -100, 100, MIN_PWM, MAX_PWM); 
-
     if (arm_input)
     {
         if (!COPTER_ARMED)
@@ -143,8 +139,17 @@ void mapInputs ()
         altitude_threshold = height;
         hover_throttle = throttle_input;
     }
-    else { hover_set = 0;}
+    else if (!hover_input && hover_set)
+    {
+        hover_set = 0;
+    }
+    
     if (hover_set) { hover ();}
+    
+    pitch_output = map (pitch_input, -100, 100, MIN_PWM, MAX_PWM); 
+    roll_output = map (roll_input, -100, 100, MIN_PWM, MAX_PWM); 
+    throttle_output = map (throttle_input, 0, 100, MIN_THROTTLE, MAX_PWM); 
+    yaw_output = map (yaw_input, -100, 100, MIN_PWM, MAX_PWM); 
 }
 
 void hover ()
@@ -152,14 +157,17 @@ void hover ()
     // altitude in cm
     if (height < altitude_threshold)
     {
-        hover_throttle += 1;
+        //hover_throttle += 1;
+        throttle_input += 1;
     }
     else if (height > altitude_threshold)
     {
-        hover_throttle -= 1;
+        //hover_throttle -= 1;
+        throttle_input -= 1;
     }
 
-    throttle_input = hover_throttle;
+    //throttle_input = hover_throttle;
+
 }
 
 void resetOutputs ()
