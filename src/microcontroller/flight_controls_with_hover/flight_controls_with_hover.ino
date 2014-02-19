@@ -159,11 +159,14 @@ void hover ()
     {
         //hover_throttle += 1;
         throttle_input += 1;
+        if (throttle_input > 100) { throttle_input = 100; }
     }
     else if (height > altitude_threshold)
     {
         //hover_throttle -= 1;
         throttle_input -= 1;
+        if (throttle_input < 0) { throttle_input = 0; }
+
     }
 
     //throttle_input = hover_throttle;
