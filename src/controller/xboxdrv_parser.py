@@ -150,7 +150,6 @@ class Controller:
 
         # Maps values to a range
         if self._in_range and self._out_range:
-            """
             for key in self.outputs:
                 self.outputs[key] = self.map_range (self.outputs[key], self._in_range[0], self._in_range[1], self._out_range[0], self._out_range[1])
 

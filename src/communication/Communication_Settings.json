@@ -1,5 +1,5 @@
 {
-	"Direction": {
+	"Switcher": {
 		"IP": "127.0.0.1",
 		"Port": "5001",
 		"Update_Frequency": 0.001,
@@ -13,7 +13,7 @@
 		"Port": "5002",
 		"Update_Frequency": 0.01,
 		"Listening":[
-			"Direction"
+			"Switcher"
 			]
 		},
 	"Controller": {
@@ -43,7 +43,7 @@
 		"Port": "5020",
 		"Update_Frequency": 0.01,
 		"Listening":[
-			"Direction",
+			"Switcher",
 			"Motors",
 			"Controller"
 			]
